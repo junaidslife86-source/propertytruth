@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "council": "City of Sydney",
+        "application_number": "DA-2024-00142",
+        "address": "120 George Street, Sydney NSW",
+        "application_type": "Development Application",
+        "development_type": "Mixed-use",
+        "estimated_cost": 45000000,
+        "lodged_date": "2024-03-15",
+        "status": "Under assessment",
+        "storeys": 12,
+        "description": "Mixed-use tower with retail podium"
+      },
+      "geometry": { "type": "Point", "coordinates": [151.2093, -33.8688] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "council": "City of Sydney",
+        "application_number": "DA-2024-00089",
+        "address": "45 Pitt Street, Sydney NSW",
+        "application_type": "Modification",
+        "development_type": "Residential",
+        "estimated_cost": 12000000,
+        "lodged_date": "2024-01-22",
+        "status": "Approved",
+        "storeys": 8,
+        "description": "Boutique residential apartments"
+      },
+      "geometry": { "type": "Point", "coordinates": [151.208, -33.8675] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "council": "Inner West Council",
+        "application_number": "DA-2023-04521",
+        "address": "88 King Street, Newtown NSW",
+        "application_type": "Development Application",
+        "development_type": "Medium density",
+        "estimated_cost": 8500000,
+        "lodged_date": "2023-11-08",
+        "status": "Under assessment",
+        "storeys": 6,
+        "description": "Medium-density residential with ground-floor retail"
+      },
+      "geometry": { "type": "Point", "coordinates": [151.1795, -33.8915] }
+    }
+  ]
+}
