@@ -24,6 +24,7 @@ import {
   getStrataSessionId,
 } from "@/lib/auth/client-session";
 import type { UserDocument, UserUpdateInput } from "@/lib/auth/user-schema";
+import { parseJsonResponse } from "@/lib/api/parse-response";
 import { useBuyerProfileStore } from "@/stores/buyer-profile-store";
 
 interface AuthContextValue {
@@ -53,7 +54,7 @@ async function fetchProfile(): Promise<UserDocument | null> {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) return null;
-  return res.json() as Promise<UserDocument>;
+  return parseJsonResponse<UserDocument>(res);
 }
 
 async function linkAnonymousSessions(): Promise<void> {
@@ -137,7 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
         body: JSON.stringify(patch),
       });
-      const data = await res.json();
+      const data = await parseJsonResponse<UserDocument & { error?: string }>(res);
       if (!res.ok) {
         throw new Error(data.error ?? "Update failed");
       }

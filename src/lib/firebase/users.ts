@@ -54,11 +54,13 @@ export async function updateUserDocument(
   db: Firestore,
   uid: string,
   patch: UserUpdateInput,
+  identity?: AuthIdentity,
 ): Promise<UserDocument> {
   const ref = db.collection(COLLECTION).doc(uid);
-  const snap = await ref.get();
+  let snap = await ref.get();
   if (!snap.exists) {
-    throw new Error("User profile not found");
+    await ensureUserDocument(db, identity ?? { uid });
+    snap = await ref.get();
   }
 
   const current = userDocumentSchema.parse({ uid, ...snap.data() });

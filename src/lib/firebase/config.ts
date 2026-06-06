@@ -21,9 +21,10 @@ export function getFirebaseClientConfig() {
 export function hasFirebaseAdminConfig() {
   return Boolean(
     process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
-      (process.env.FIREBASE_SERVICE_ACCOUNT_PATH ||
-        (process.env.FIREBASE_ADMIN_CLIENT_EMAIL &&
-          process.env.FIREBASE_ADMIN_PRIVATE_KEY)),
+      (process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim() ||
+        (process.env.FIREBASE_ADMIN_CLIENT_EMAIL?.trim() &&
+          process.env.FIREBASE_ADMIN_PRIVATE_KEY?.trim()) ||
+        process.env.FIREBASE_SERVICE_ACCOUNT_PATH?.trim()),
   );
 }
 

@@ -24,11 +24,13 @@ function loadAdminCredentials(): {
   clientEmail: string;
   privateKey: string;
 } {
-  const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
-  if (serviceAccountPath) {
-    const json = JSON.parse(
-      readFileSync(resolve(process.cwd(), serviceAccountPath), "utf8"),
-    ) as { project_id: string; client_email: string; private_key: string };
+  const jsonEnv = process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim();
+  if (jsonEnv) {
+    const json = JSON.parse(jsonEnv) as {
+      project_id: string;
+      client_email: string;
+      private_key: string;
+    };
     return {
       projectId: json.project_id,
       clientEmail: json.client_email,
@@ -36,9 +38,31 @@ function loadAdminCredentials(): {
     };
   }
 
+  const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH?.trim();
+  if (serviceAccountPath) {
+    try {
+      const json = JSON.parse(
+        readFileSync(resolve(process.cwd(), serviceAccountPath), "utf8"),
+      ) as { project_id: string; client_email: string; private_key: string };
+      return {
+        projectId: json.project_id,
+        clientEmail: json.client_email,
+        privateKey: json.private_key,
+      };
+    } catch (err) {
+      throw new Error(
+        `Could not read FIREBASE_SERVICE_ACCOUNT_PATH (${serviceAccountPath}): ${
+          err instanceof Error ? err.message : "unknown error"
+        }`,
+      );
+    }
+  }
+
   const privateKeyRaw = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
   if (!privateKeyRaw) {
-    throw new Error("Missing FIREBASE_ADMIN_PRIVATE_KEY or FIREBASE_SERVICE_ACCOUNT_PATH");
+    throw new Error(
+      "Set FIREBASE_SERVICE_ACCOUNT_JSON, FIREBASE_SERVICE_ACCOUNT_PATH, or FIREBASE_ADMIN_* credentials",
+    );
   }
 
   return {
@@ -55,24 +79,30 @@ function initAdminApp(): App | null {
     return null;
   }
 
-  const existing = getApps()[0];
-  if (existing) {
-    adminApp = existing;
-    return existing;
+  try {
+    const existing = getApps()[0];
+    if (existing) {
+      adminApp = existing;
+      return existing;
+    }
+
+    const { projectId, clientEmail, privateKey } = loadAdminCredentials();
+
+    adminApp = initializeApp({
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    });
+
+    return adminApp;
+  } catch (err) {
+    console.error("[firebase-admin] init failed:", err);
+    adminApp = null;
+    return null;
   }
-
-  const { projectId, clientEmail, privateKey } = loadAdminCredentials();
-
-  adminApp = initializeApp({
-    credential: cert({
-      projectId,
-      clientEmail,
-      privateKey,
-    }),
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  });
-
-  return adminApp;
 }
 
 export function getAdminApp() {

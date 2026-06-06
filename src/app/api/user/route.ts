@@ -9,6 +9,8 @@ import {
 import { userUpdateSchema } from "@/lib/auth/user-schema";
 import { rateLimit } from "@/lib/rate-limit";
 
+export const runtime = "nodejs";
+
 function unauthorized() {
   return NextResponse.json(
     { error: "Sign in required", code: "AUTH_REQUIRED" },
@@ -27,7 +29,14 @@ export async function GET(request: Request) {
 
   const db = getAdminDb();
   if (!db) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 });
+    return NextResponse.json(
+      {
+        error:
+          "Firebase Admin is not configured on the server. Set FIREBASE_SERVICE_ACCOUNT_JSON or FIREBASE_ADMIN_* in Vercel.",
+        code: "FIREBASE_ADMIN_MISSING",
+      },
+      { status: 503 },
+    );
   }
 
   const identity = await verifyAuthToken(request.headers.get("authorization"));
@@ -58,7 +67,14 @@ export async function PATCH(request: Request) {
 
   const db = getAdminDb();
   if (!db) {
-    return NextResponse.json({ error: "Firebase not configured" }, { status: 503 });
+    return NextResponse.json(
+      {
+        error:
+          "Firebase Admin is not configured on the server. Set FIREBASE_SERVICE_ACCOUNT_JSON or FIREBASE_ADMIN_* in Vercel.",
+        code: "FIREBASE_ADMIN_MISSING",
+      },
+      { status: 503 },
+    );
   }
 
   const identity = await verifyAuthToken(request.headers.get("authorization"));
@@ -81,7 +97,7 @@ export async function PATCH(request: Request) {
 
   try {
     await ensureUserDocument(db, identity);
-    const doc = await updateUserDocument(db, identity.uid, parsed.data);
+    const doc = await updateUserDocument(db, identity.uid, parsed.data, identity);
     return NextResponse.json(doc);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Update failed";
