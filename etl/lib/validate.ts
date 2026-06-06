@@ -35,3 +35,26 @@ export const geoJsonFeatureCollectionSchema = z.object({
 export type DevelopmentApplicationRow = z.infer<
   typeof developmentApplicationRowSchema
 >;
+
+export const riskOverlayCategorySchema = z.enum([
+  "flood",
+  "bushfire",
+  "heritage",
+  "aircraft_noise",
+  "contamination",
+]);
+
+export const riskOverlaySeveritySchema = z.enum(["low", "medium", "high"]);
+
+export const riskOverlayRowSchema = z.object({
+  category: riskOverlayCategorySchema,
+  name: z.string().min(1),
+  severity: riskOverlaySeveritySchema.default("medium"),
+  source: z.string().min(1),
+  source_url: z.string().url().optional(),
+  last_updated: z.string().optional(),
+  geometry: z.string().min(1),
+  raw_source_data: z.record(z.string(), z.unknown()).optional(),
+});
+
+export type RiskOverlayRow = z.infer<typeof riskOverlayRowSchema>;

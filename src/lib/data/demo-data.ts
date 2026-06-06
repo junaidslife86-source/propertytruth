@@ -1,14 +1,15 @@
 import type { PropertyScanResult } from "@/lib/schemas";
+import { buildBuyerRiskSnapshot } from "@/lib/risk/signals";
 
 const SYDNEY_CBD = { lat: -33.8688, lng: 151.2093 };
 
-/** Demo scan for local dev without Supabase */
+/** Demo scan for local dev without Firebase seed data */
 export function buildDemoScanResult(
   formattedAddress: string,
   lat: number,
   lng: number,
-  suburb?: string,
-  postcode?: string,
+  suburb?: string | null,
+  postcode?: string | null,
   radiusMeters = 500,
 ): PropertyScanResult {
   const propertyId = `demo-${Buffer.from(`${lat},${lng}`).toString("base64url").slice(0, 12)}`;
@@ -133,6 +134,25 @@ export function buildDemoScanResult(
     },
   ];
 
+  const riskOverlays = [
+    {
+      id: "overlay-flood-demo",
+      category: "flood" as const,
+      severity: "medium" as const,
+      name: "Probable Maximum Flood — Harbour fringe (demo)",
+      source: "NSW Department of Planning and Environment (demo)",
+      source_url: "https://www.planningportal.nsw.gov.au/spatialviewer/",
+      last_updated: new Date().toISOString(),
+    },
+  ];
+
+  const { buyerRiskSignals, confidenceScore } = buildBuyerRiskSnapshot(
+    developments,
+    infrastructure,
+    zoning,
+    riskOverlays,
+  );
+
   return {
     propertyId,
     formattedAddress,
@@ -144,9 +164,11 @@ export function buildDemoScanResult(
     developments,
     infrastructure,
     zoning,
+    riskOverlays,
     riskIndicators,
-    quickSummary:
-      "Notable planning activity nearby includes a large mixed-use DA and ongoing transport upgrades. Density may increase gradually — review individual applications for detail.",
+    buyerRiskSignals,
+    confidenceScore,
+    quickSummary: confidenceScore.summary,
     dataSource: "demo",
     scannedAt: new Date().toISOString(),
   };

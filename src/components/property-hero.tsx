@@ -14,9 +14,10 @@ const InteractiveMap = dynamic(
 
 interface PropertyHeroProps {
   scan: PropertyScanResult;
+  compact?: boolean;
 }
 
-export function PropertyHero({ scan }: PropertyHeroProps) {
+export function PropertyHero({ scan, compact = false }: PropertyHeroProps) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 12 }}
@@ -25,20 +26,36 @@ export function PropertyHero({ scan }: PropertyHeroProps) {
       className="grid gap-8 lg:grid-cols-2 lg:items-start"
     >
       <div className="space-y-4">
-        <div className="flex items-start gap-2 text-stone-500">
-          <MapPin className="mt-1 h-4 w-4 shrink-0" />
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">
-              {scan.formattedAddress}
-            </h1>
-            <p className="mt-1 text-sm text-stone-500">
-              {[scan.suburb, scan.postcode].filter(Boolean).join(" · ")}
-            </p>
+        {!compact && (
+          <div className="flex items-start gap-2 text-stone-500">
+            <MapPin className="mt-1 h-4 w-4 shrink-0" />
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">
+                {scan.formattedAddress}
+              </h1>
+              <p className="mt-1 text-sm text-stone-500">
+                {[scan.suburb, scan.postcode].filter(Boolean).join(" · ")}
+              </p>
+            </div>
           </div>
-        </div>
-        <p className="max-w-xl text-base leading-relaxed text-stone-600">
-          {scan.quickSummary}
-        </p>
+        )}
+        {compact ? (
+          <div className="flex items-start gap-2 text-stone-500">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <h2 className="text-lg font-semibold tracking-tight text-stone-900">
+                Location context
+              </h2>
+              <p className="mt-1 text-sm text-stone-500">
+                {[scan.suburb, scan.postcode].filter(Boolean).join(" · ")}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="max-w-xl text-base leading-relaxed text-stone-600">
+            {scan.quickSummary}
+          </p>
+        )}
         <div className="flex flex-wrap gap-2">
           <Badge variant="default">{scan.radiusMeters}m scan radius</Badge>
           {scan.dataSource === "demo" && (

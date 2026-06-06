@@ -8,12 +8,21 @@ export function SiteHeader() {
         <Link href="/" className="text-sm font-semibold tracking-tight text-stone-900">
           {APP_NAME}
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-stone-600">
-          <Link href="/#how-it-works" className="hover:text-stone-900">
-            How it works
+        <nav className="flex items-center gap-4 text-sm text-stone-600 sm:gap-6">
+          <Link href="/onboarding" className="hover:text-stone-900">
+            Profile
           </Link>
-          <Link href="/#faq" className="hover:text-stone-900">
-            FAQ
+          <Link href="/shortlist" className="hover:text-stone-900">
+            Shortlist
+          </Link>
+          <Link href="/compare" className="hover:text-stone-900">
+            Compare
+          </Link>
+          <Link href="/inspection/new" className="hover:text-stone-900">
+            Inspect
+          </Link>
+          <Link href="/strata/upload" className="hover:text-stone-900">
+            Strata
           </Link>
         </nav>
       </div>

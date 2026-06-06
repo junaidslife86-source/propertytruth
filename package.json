@@ -10,6 +10,7 @@
     "etl:import": "tsx etl/pipelines/import-geojson.ts"
   },
   "dependencies": {
+    "@google-cloud/documentai": "^9.6.2",
     "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -25,6 +26,8 @@
     "@tanstack/react-query": "^5.100.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.14.0",
+    "firebase-admin": "^13.10.0",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "maplibre-gl": "^5.24.0",
@@ -33,6 +36,7 @@
     "react-dom": "19.2.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
+    "unpdf": "^1.6.2",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },

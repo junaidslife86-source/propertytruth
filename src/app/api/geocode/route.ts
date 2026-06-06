@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { geocodeRequestSchema } from "@/lib/schemas";
 import { rateLimit } from "@/lib/rate-limit";
-import { SYDNEY_BOUNDS } from "@/lib/constants";
+import { demoGeocode } from "@/lib/places/demo-suggestions";
+import {
+  addressfinderGeocode,
+  ADDRESSFINDER_PLACE_PREFIX,
+} from "@/lib/places/addressfinder";
+import {
+  geocodeFromCoordinates,
+  geocodeWithGoogle,
+  geocodeWithNominatim,
+} from "@/lib/places/geocode";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
@@ -19,91 +28,54 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid geocode request" }, { status: 400 });
   }
 
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+  const { placeId, address, lat, lng } = parsed.data;
 
-  if (parsed.data.placeId?.startsWith("demo-") || !apiKey) {
-    return NextResponse.json(demoGeocode(parsed.data.placeId, parsed.data.address));
+  if (placeId?.startsWith(ADDRESSFINDER_PLACE_PREFIX)) {
+    const af = await addressfinderGeocode(placeId);
+    if (af) return NextResponse.json(af);
   }
 
-  let url: URL;
-  if (parsed.data.placeId) {
-    url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-    url.searchParams.set("place_id", parsed.data.placeId);
-    url.searchParams.set("key", apiKey);
-  } else {
-    url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-    url.searchParams.set("address", `${parsed.data.address}, Sydney NSW, Australia`);
-    url.searchParams.set("key", apiKey);
+  if (placeId?.startsWith("demo-")) {
+    const demo = demoGeocode(placeId, address);
+    if (demo) return NextResponse.json(demo);
   }
 
-  const res = await fetch(url.toString());
-  const data = await res.json();
-  const result = data.results?.[0];
-
-  if (!result) {
-    return NextResponse.json(
-      { error: "We couldn't find that address. Try a Sydney property." },
-      { status: 404 },
+  if (
+    lat != null &&
+    lng != null &&
+    (placeId?.startsWith("osm-") || address)
+  ) {
+    const fromCoords = geocodeFromCoordinates(
+      lat,
+      lng,
+      address ?? `${lat}, ${lng}`,
+      placeId,
     );
+    if (fromCoords) return NextResponse.json(fromCoords);
   }
 
-  const { lat, lng } = result.geometry.location;
-  if (!isInSydney(lat, lng)) {
-    return NextResponse.json(
-      { error: "Please enter a property within greater Sydney." },
-      { status: 400 },
-    );
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY?.trim();
+
+  if (apiKey && placeId && !placeId.startsWith("osm-")) {
+    const google = await geocodeWithGoogle(apiKey, { placeId, address });
+    if (google) return NextResponse.json(google);
   }
 
-  const components = result.address_components as Array<{
-    types: string[];
-    long_name: string;
-    short_name: string;
-  }>;
+  if (apiKey && address) {
+    const google = await geocodeWithGoogle(apiKey, { address });
+    if (google) return NextResponse.json(google);
+  }
 
-  return NextResponse.json({
-    formattedAddress: result.formatted_address,
-    lat: Number(lat),
-    lng: Number(lng),
-    suburb: findComponent(components, "locality") ?? findComponent(components, "sublocality") ?? undefined,
-    postcode: findComponent(components, "postal_code") ?? undefined,
-    placeId: result.place_id,
-  });
-}
+  if (address) {
+    const osm = await geocodeWithNominatim(address);
+    if (osm) return NextResponse.json(osm);
+  }
 
-function findComponent(
-  components: Array<{ types: string[]; long_name: string }>,
-  type: string,
-) {
-  return components.find((c) => c.types.includes(type))?.long_name;
-}
+  const demo = demoGeocode(placeId, address);
+  if (demo) return NextResponse.json(demo);
 
-function isInSydney(lat: number, lng: number) {
-  return (
-    lat >= SYDNEY_BOUNDS.minLat &&
-    lat <= SYDNEY_BOUNDS.maxLat &&
-    lng >= SYDNEY_BOUNDS.minLng &&
-    lng <= SYDNEY_BOUNDS.maxLng
+  return NextResponse.json(
+    { error: "We couldn't find that address. Try a Sydney property." },
+    { status: 404 },
   );
-}
-
-function demoGeocode(placeId?: string, address?: string) {
-  if (placeId === "demo-newtown" || address?.toLowerCase().includes("newtown")) {
-    return {
-      formattedAddress: "88 King Street, Newtown NSW 2042, Australia",
-      lat: -33.8915,
-      lng: 151.1795,
-      suburb: "Newtown",
-      postcode: "2042",
-      placeId: "demo-newtown",
-    };
-  }
-  return {
-    formattedAddress: "123 George Street, Sydney NSW 2000, Australia",
-    lat: -33.8688,
-    lng: 151.2093,
-    suburb: "Sydney",
-    postcode: "2000",
-    placeId: "demo-sydney-cbd",
-  };
 }

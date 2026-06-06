@@ -14,6 +14,8 @@ type Suggestion = {
   description: string;
   mainText: string;
   secondaryText: string;
+  lat?: number;
+  lng?: number;
 };
 
 interface AddressSearchProps {
@@ -30,12 +32,14 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [selected, setSelected] = useState<Suggestion | null>(null);
+  const [noResults, setNoResults] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchSuggestions = useCallback(async (input: string) => {
-    if (input.length < 3) {
+    if (input.length < 2) {
       setSuggestions([]);
+      setNoResults(false);
       return;
     }
     setLoading(true);
@@ -44,9 +48,12 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
         `/api/places/autocomplete?input=${encodeURIComponent(input)}`,
       );
       const data = await res.json();
-      if (data.suggestions) setSuggestions(data.suggestions);
+      const list: Suggestion[] = data.suggestions ?? [];
+      setSuggestions(list);
+      setNoResults(list.length === 0 && input.length >= 2);
     } catch {
       setSuggestions([]);
+      setNoResults(true);
     } finally {
       setLoading(false);
     }
@@ -74,9 +81,19 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
     setScanning(true);
     setIsScanning(true);
     try {
-      let body: { placeId?: string; address?: string };
+      let body: {
+        placeId?: string;
+        address?: string;
+        lat?: number;
+        lng?: number;
+      };
       if (selected?.placeId) {
-        body = { placeId: selected.placeId };
+        body = {
+          placeId: selected.placeId,
+          address: selected.description,
+          lat: selected.lat,
+          lng: selected.lng,
+        };
       } else if (query.trim().length >= 5) {
         body = { address: query.trim() };
       } else {
@@ -133,6 +150,7 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
               setSelected(null);
               setQuery(e.target.value);
               setOpen(true);
+              setNoResults(false);
             }}
             onFocus={() => setOpen(true)}
             placeholder="Enter a Sydney property address"
@@ -183,6 +201,7 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
                     setSelected(s);
                     setQuery(s.description);
                     setOpen(false);
+                    setNoResults(false);
                   }}
                 >
                   <span className="text-sm font-medium text-stone-900">{s.mainText}</span>
@@ -191,6 +210,16 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
               </li>
             ))}
           </motion.ul>
+        )}
+        {open && noResults && !loading && query.length >= 2 && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute z-50 mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-500 shadow-lg"
+          >
+            No addresses found. Try a street number and suburb within Sydney.
+          </motion.p>
         )}
       </AnimatePresence>
     </div>

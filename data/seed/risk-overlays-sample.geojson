@@ -1,0 +1,74 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "category": "flood",
+        "name": "1% AEP Flood Planning Area — Parramatta River fringe",
+        "severity": "high",
+        "source": "NSW Department of Planning and Environment",
+        "source_url": "https://www.planningportal.nsw.gov.au/spatialviewer/",
+        "last_updated": "2024-06-01"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [151.195, -33.885],
+            [151.235, -33.885],
+            [151.235, -33.855],
+            [151.195, -33.855],
+            [151.195, -33.885]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "category": "bushfire",
+        "name": "Bush Fire Prone Land — Northern Beaches fringe",
+        "severity": "medium",
+        "source": "NSW Rural Fire Service",
+        "source_url": "https://www.rfs.nsw.gov.au/plan-and-prepare/building-in-a-bush-fire-prone-area",
+        "last_updated": "2024-03-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [151.24, -33.72],
+            [151.32, -33.72],
+            [151.32, -33.65],
+            [151.24, -33.65],
+            [151.24, -33.72]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "category": "heritage",
+        "name": "Heritage Conservation Area — The Rocks",
+        "severity": "low",
+        "source": "City of Sydney LEP",
+        "source_url": "https://www.cityofsydney.nsw.gov.au/",
+        "last_updated": "2023-11-20"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [151.204, -33.862],
+            [151.212, -33.862],
+            [151.212, -33.856],
+            [151.204, -33.856],
+            [151.204, -33.862]
+          ]
+        ]
+      }
+    }
+  ]
+}

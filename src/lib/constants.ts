@@ -1,5 +1,5 @@
-export const APP_NAME = "Sydney Development Radar";
-export const APP_TAGLINE = "See what could change around your future home.";
+export const APP_NAME = "PropertyTruth";
+export const APP_TAGLINE = "Your buyer-side property decision cockpit.";
 export const DEFAULT_SCAN_RADIUS_METERS = 500;
 export const SYDNEY_BOUNDS = {
   minLat: -34.2,
@@ -9,4 +9,7 @@ export const SYDNEY_BOUNDS = {
 };
 
 export const AI_DISCLAIMER =
-  "This summary is generated from nearby planning records only. It is not legal, financial, or planning advice. Outcomes may change as applications progress.";
+  "Based on available public data. Not a valuation, building inspection, legal advice or professional advice.";
+
+export const BUYER_DISCLAIMER =
+  "Based on available data. Not a valuation, building inspection, legal advice or professional advice.";

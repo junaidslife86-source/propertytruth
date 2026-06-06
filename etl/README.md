@@ -28,7 +28,21 @@ etl/
 
 ```bash
 npm run etl:import -- --file ./data/seed/sydney-sample.json --table development_applications
+npm run etl:import -- --file ./data/seed/risk-overlays-sample.geojson --table risk_overlays
 ```
+
+### Risk overlay GeoJSON properties
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| `category` | yes | `flood`, `bushfire`, `heritage`, `aircraft_noise`, `contamination` |
+| `name` | yes | Overlay display name |
+| `severity` | no | `low`, `medium`, `high` (default: medium) |
+| `source` | no | Dataset authority |
+| `source_url` | no | Link to source dataset |
+| `last_updated` | no | ISO date string |
+
+Geometry must be `Polygon` or `MultiPolygon` (or `Point` for single-location markers).
 
 Requires `SUPABASE_SERVICE_ROLE_KEY` and applied migrations.
 

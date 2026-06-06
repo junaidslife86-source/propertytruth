@@ -1,51 +1,63 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Building2, Layers, Map, Shield, Train } from "lucide-react";
+import {
+  Search,
+  GitCompareArrows,
+  ClipboardCheck,
+  FileText,
+  Bookmark,
+  Shield,
+  Map,
+} from "lucide-react";
 import { AddressSearch } from "@/components/address-search";
 import { HeroMapBackground } from "@/components/hero-map-background";
-import { DevelopmentCard } from "@/components/development-card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { APP_TAGLINE } from "@/lib/constants";
-import type { Development } from "@/lib/schemas";
 
-const EXAMPLE_DEVELOPMENTS: Development[] = [
+const COCKPIT_FEATURES = [
   {
-    id: "ex-1",
-    council: "City of Sydney",
-    application_number: "DA-2024-00142",
-    address: "120 George Street, Sydney",
-    development_type: "Mixed-use",
-    lodged_date: "2024-03-15",
-    status: "Under assessment",
-    storeys: 12,
-    description: "Mixed-use tower with retail podium",
-    distance_meters: 180,
+    href: "/",
+    icon: Search,
+    title: "Risk Snapshot",
+    desc: "Scan any Sydney address for buyer confidence score and risk signals.",
+    color: "bg-stone-900 text-white",
   },
   {
-    id: "ex-2",
-    council: "City of Sydney",
-    application_number: "DA-2024-00089",
-    address: "45 Pitt Street, Sydney",
-    development_type: "Residential",
-    lodged_date: "2024-01-22",
-    status: "Approved",
-    storeys: 8,
-    description: "Boutique residential apartments",
-    distance_meters: 320,
+    href: "/compare",
+    icon: GitCompareArrows,
+    title: "Compare Board",
+    desc: "Compare up to 4 properties side by side.",
+    color: "bg-amber-100 text-amber-900",
   },
-];
-
-const CHECKS = [
-  { icon: Building2, title: "Development applications", desc: "Nearby DAs and modification applications" },
-  { icon: Layers, title: "Zoning context", desc: "Overlays that shape what can be built" },
-  { icon: Train, title: "Infrastructure", desc: "Transport and public realm projects" },
-  { icon: Map, title: "Future change signals", desc: "Density, scale, and neighbourhood shifts" },
+  {
+    href: "/inspection/new",
+    icon: ClipboardCheck,
+    title: "Inspection Copilot",
+    desc: "Mobile checklist for open home day with photos and notes.",
+    color: "bg-emerald-100 text-emerald-900",
+  },
+  {
+    href: "/strata/upload",
+    icon: FileText,
+    title: "Strata AI",
+    desc: "Upload strata PDFs for AI red-flag analysis.",
+    color: "bg-violet-100 text-violet-900",
+  },
+  {
+    href: "/shortlist",
+    icon: Bookmark,
+    title: "Shortlist",
+    desc: "Track properties you're seriously considering.",
+    color: "bg-sky-100 text-sky-900",
+  },
+  {
+    href: "/#how-it-works",
+    icon: Shield,
+    title: "Due Diligence",
+    desc: "Verify, offer readiness and ownership cost on each report.",
+    color: "bg-orange-100 text-orange-900",
+  },
 ];
 
 export default function HomePage() {
@@ -53,19 +65,19 @@ export default function HomePage() {
     <>
       <section className="relative overflow-hidden border-b border-stone-200/60">
         <HeroMapBackground />
-        <div className="relative mx-auto max-w-3xl px-4 pb-24 pt-20 text-center sm:pt-28">
+        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pt-24">
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 text-sm font-medium text-stone-500"
+            className="mb-3 text-sm font-medium text-stone-500"
           >
-            Buyer-side property intelligence for Sydney
+            Buyer-side property decision cockpit
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl sm:leading-tight"
+            className="text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl"
           >
             {APP_TAGLINE}
           </motion.h1>
@@ -73,99 +85,74 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-stone-600"
+            className="mx-auto mt-4 max-w-xl text-base text-stone-600"
           >
-            Understand nearby development applications, infrastructure projects, and zoning context — so you can buy with clarity, not surprise.
+            Domain helps you find properties. PropertyTruth helps you decide
+            whether to pursue them — with confidence scores, risk maps, inspections
+            and due diligence.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="mx-auto mt-10 max-w-xl text-left"
+            className="mx-auto mt-8 max-w-xl text-left"
           >
             <AddressSearch size="large" />
           </motion.div>
         </div>
       </section>
 
-      <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-20">
-        <h2 className="mb-2 text-center text-2xl font-semibold tracking-tight text-stone-900">
-          What we check
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <h2 className="mb-2 text-center text-2xl font-semibold text-stone-900">
+          Your buyer cockpit
         </h2>
-        <p className="mx-auto mb-12 max-w-lg text-center text-sm text-stone-500">
-          We surface planning records and infrastructure data around your address — not valuations or predictions.
+        <p className="mx-auto mb-10 max-w-lg text-center text-sm text-stone-500">
+          Everything you need from first scan to offer — visual, calm, source-backed.
         </p>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {CHECKS.map((item, i) => (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {COCKPIT_FEATURES.map((f, i) => (
             <motion.div
-              key={item.title}
+              key={f.title}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="rounded-2xl border border-stone-200/80 bg-white/80 p-6 shadow-sm"
+              transition={{ delay: i * 0.06 }}
             >
-              <item.icon className="mb-4 h-5 w-5 text-stone-500" />
-              <h3 className="font-medium text-stone-900">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-stone-500">{item.desc}</p>
+              <Link
+                href={f.href}
+                className="group flex h-full flex-col rounded-2xl border border-stone-200/80 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <div
+                  className={`mb-4 inline-flex w-fit rounded-xl p-3 ${f.color}`}
+                >
+                  <f.icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-semibold text-stone-900">{f.title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-stone-500">
+                  {f.desc}
+                </p>
+                <span className="mt-4 text-sm font-medium text-stone-700 group-hover:underline">
+                  Open →
+                </span>
+              </Link>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-stone-200/60 bg-white/50 py-20">
-        <div className="mx-auto max-w-2xl px-4">
-          <h2 className="mb-8 text-center text-2xl font-semibold tracking-tight text-stone-900">
-            Example nearby developments
+      <section id="how-it-works" className="border-y border-stone-200/60 bg-white/60 py-16">
+        <div className="mx-auto max-w-3xl px-4 text-center">
+          <Map className="mx-auto mb-4 h-8 w-8 text-stone-400" />
+          <h2 className="text-2xl font-semibold text-stone-900">
+            Evidence-backed, not alarmist
           </h2>
-          <div className="space-y-4">
-            {EXAMPLE_DEVELOPMENTS.map((d) => (
-              <DevelopmentCard key={d.id} development={d} />
-            ))}
-          </div>
+          <p className="mt-4 text-sm leading-relaxed text-stone-600">
+            We ingest NSW planning, flood, bushfire and strata data into PostGIS
+            and summarise in plain English. No price predictions. No &ldquo;safe&rdquo;
+            or &ldquo;unsafe&rdquo; labels — only what available public data shows and
+            what still needs professional review.
+          </p>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-3xl px-4 py-20 text-center">
-        <Shield className="mx-auto mb-4 h-8 w-8 text-stone-400" />
-        <h2 className="text-2xl font-semibold tracking-tight text-stone-900">
-          Built to help you avoid future regret
-        </h2>
-        <p className="mt-4 text-sm leading-relaxed text-stone-600">
-          Sydney Development Radar summarises public planning data in plain language. We don&apos;t scrape listing sites, predict prices, or replace professional advice. Our goal is emotional clarity — so you feel informed before you commit.
-        </p>
-      </section>
-
-      <section id="faq" className="mx-auto max-w-2xl px-4 pb-24">
-        <h2 className="mb-8 text-center text-2xl font-semibold tracking-tight text-stone-900">
-          FAQ
-        </h2>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="1">
-            <AccordionTrigger>Is this legal or financial advice?</AccordionTrigger>
-            <AccordionContent>
-              No. We summarise publicly available planning records. Always confirm details with your solicitor or buyer&apos;s agent.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="2">
-            <AccordionTrigger>Where does the data come from?</AccordionTrigger>
-            <AccordionContent>
-              Council and NSW open datasets, ingested via our ETL pipeline into PostGIS. Coverage improves as more sources are connected.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="3">
-            <AccordionTrigger>Does this predict property prices?</AccordionTrigger>
-            <AccordionContent>
-              Never. We focus on what might change around a property — not investment returns or valuations.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="4">
-            <AccordionTrigger>Can I use it without an account?</AccordionTrigger>
-            <AccordionContent>
-              Yes. Scan any Sydney address instantly. Sign in to save reports and revisit them later.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
       </section>
     </>
   );

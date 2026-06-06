@@ -3,8 +3,10 @@ import { z } from "zod";
 export const geocodeRequestSchema = z.object({
   placeId: z.string().min(1).optional(),
   address: z.string().min(3).optional(),
-}).refine((d) => d.placeId || d.address, {
-  message: "placeId or address required",
+  lat: z.coerce.number().min(-90).max(90).optional(),
+  lng: z.coerce.number().min(-180).max(180).optional(),
+}).refine((d) => d.placeId || d.address || (d.lat != null && d.lng != null), {
+  message: "placeId, address, or lat/lng required",
 });
 
 export const scanRequestSchema = z.object({
@@ -53,12 +55,71 @@ export const zoningSchema = z.object({
   council: z.string().nullable().optional(),
 });
 
+export const riskOverlayCategorySchema = z.enum([
+  "flood",
+  "bushfire",
+  "heritage",
+  "aircraft_noise",
+  "contamination",
+]);
+
+export const riskOverlaySchema = z.object({
+  id: z.string(),
+  category: riskOverlayCategorySchema,
+  severity: z.enum(["low", "medium", "high"]),
+  name: z.string(),
+  source: z.string(),
+  source_url: z.string().nullish(),
+  last_updated: z.string(),
+});
+
 export const riskIndicatorSchema = z.object({
   id: z.string(),
   severity: z.enum(["low", "medium", "high"]),
   title: z.string(),
   description: z.string(),
   source: z.string().optional(),
+});
+
+export const riskCategorySchema = z.enum([
+  "planning",
+  "flood",
+  "bushfire",
+  "noise",
+  "strata",
+  "inspection",
+  "ownership_cost",
+]);
+
+export const riskSeveritySchema = z.enum(["low", "medium", "high", "unknown"]);
+
+export const buyerRiskSignalSchema = z.object({
+  id: z.string(),
+  category: riskCategorySchema,
+  severity: riskSeveritySchema,
+  title: z.string(),
+  plainEnglishSummary: z.string(),
+  buyerQuestion: z.string(),
+  evidenceSource: z.string(),
+  sourceUrl: z.string().url().optional(),
+  confidence: z.enum(["low", "medium", "high"]),
+  lastUpdated: z.string(),
+});
+
+export const propertyConfidenceLabelSchema = z.enum([
+  "strong",
+  "cautious",
+  "risky",
+  "incomplete",
+]);
+
+export const propertyConfidenceScoreSchema = z.object({
+  score: z.number().min(0).max(100),
+  label: propertyConfidenceLabelSchema,
+  summary: z.string(),
+  blockers: z.array(z.string()),
+  cautionItems: z.array(z.string()),
+  positives: z.array(z.string()),
 });
 
 export const propertyScanResultSchema = z.object({
@@ -72,7 +133,10 @@ export const propertyScanResultSchema = z.object({
   developments: z.array(developmentSchema),
   infrastructure: z.array(infrastructureSchema),
   zoning: z.array(zoningSchema),
+  riskOverlays: z.array(riskOverlaySchema),
   riskIndicators: z.array(riskIndicatorSchema),
+  buyerRiskSignals: z.array(buyerRiskSignalSchema),
+  confidenceScore: propertyConfidenceScoreSchema,
   quickSummary: z.string(),
   dataSource: z.enum(["database", "demo"]),
   scannedAt: z.string(),
@@ -81,7 +145,14 @@ export const propertyScanResultSchema = z.object({
 export type PropertyScanResult = z.infer<typeof propertyScanResultSchema>;
 export type Development = z.infer<typeof developmentSchema>;
 export type Infrastructure = z.infer<typeof infrastructureSchema>;
+export type RiskOverlay = z.infer<typeof riskOverlaySchema>;
+export type RiskOverlayCategory = z.infer<typeof riskOverlayCategorySchema>;
 export type RiskIndicator = z.infer<typeof riskIndicatorSchema>;
+export type RiskCategory = z.infer<typeof riskCategorySchema>;
+export type RiskSeverity = z.infer<typeof riskSeveritySchema>;
+export type BuyerRiskSignal = z.infer<typeof buyerRiskSignalSchema>;
+export type PropertyConfidenceScore = z.infer<typeof propertyConfidenceScoreSchema>;
+export type PropertyConfidenceLabel = z.infer<typeof propertyConfidenceLabelSchema>;
 
 export const aiInsightRequestSchema = z.object({
   propertyId: z.string().uuid(),

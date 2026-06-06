@@ -7,6 +7,7 @@ export const ETL_CONFIG = {
     "development_applications",
     "infrastructure_projects",
     "zoning_overlays",
+    "risk_overlays",
   ] as const,
 };
 

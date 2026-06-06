@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { getAdminDb, verifyAuthToken } from "@/lib/firebase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 
 const saveSchema = z.object({
@@ -21,18 +21,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const supabase = await createServerSupabase();
-  if (!supabase) {
+  const db = getAdminDb();
+  if (!db) {
     return NextResponse.json(
       { error: "Auth not configured", code: "AUTH_REQUIRED" },
       { status: 401 },
     );
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await verifyAuthToken(request.headers.get("authorization"));
   if (!user) {
     return NextResponse.json(
       { error: "Sign in required", code: "AUTH_REQUIRED" },
@@ -40,15 +37,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { error } = await supabase.from("saved_reports").insert({
-    user_id: user.id,
-    property_id: parsed.data.propertyId,
-    summary: parsed.data.summary,
-  });
-
-  if (error) {
+  try {
+    await db.collection("saved_reports").add({
+      userId: user.uid,
+      propertyId: parsed.data.propertyId,
+      summary: parsed.data.summary,
+      createdAt: new Date().toISOString(),
+    });
+    return NextResponse.json({ ok: true });
+  } catch {
     return NextResponse.json({ error: "Could not save report" }, { status: 500 });
   }
-
-  return NextResponse.json({ ok: true });
 }
