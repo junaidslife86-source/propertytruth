@@ -10,6 +10,7 @@ import {
 import { extractSectionFindings } from "@/lib/strata/extractors";
 import { validateFindings } from "@/lib/strata/evidence";
 import { generateStrataSummary } from "@/lib/strata/summary";
+import { redactOptional, redactPii, redactStrataSummary } from "@/lib/compliance/redact";
 import type { ProcessingStatus } from "@/lib/strata/processing-status";
 
 export function sha256(buffer: Buffer): string {
@@ -144,13 +145,13 @@ export async function runStrataProcessingPipeline(
       findingBatch.set(findingsCol.doc(), {
         category: f.category,
         severity: f.severity,
-        title: f.title,
-        plainEnglishExplanation: f.plainEnglishExplanation,
-        buyerImpact: f.buyerImpact,
-        supportingQuote: f.supportingQuote,
+        title: redactPii(f.title),
+        plainEnglishExplanation: redactPii(f.plainEnglishExplanation),
+        buyerImpact: redactOptional(f.buyerImpact),
+        supportingQuote: redactPii(f.supportingQuote),
         pageNumber: f.pageNumber,
         confidence: f.confidence,
-        recommendedQuestion: f.recommendedQuestion,
+        recommendedQuestion: redactOptional(f.recommendedQuestion),
         evidenceStrength: f.evidenceStrength,
         needsProfessionalReview: f.needsProfessionalReview ?? false,
       });
@@ -158,10 +159,8 @@ export async function runStrataProcessingPipeline(
     await findingBatch.commit();
 
     await setStatus(docRef, "generating_summary");
-    const summary = generateStrataSummary(
-      validated,
-      sections,
-      classified.length,
+    const summary = redactStrataSummary(
+      generateStrataSummary(validated, sections, classified.length),
     );
 
     const avgCoverage =

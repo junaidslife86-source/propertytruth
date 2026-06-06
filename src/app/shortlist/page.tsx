@@ -60,7 +60,7 @@ export default function ShortlistPage() {
                     </Link>
                     <div className="flex flex-wrap gap-2">
                       <Badge variant="default">
-                        Score {scan.confidenceScore.score}
+                        Coverage {scan.confidenceScore.score}%
                       </Badge>
                       <Badge variant="medium">
                         {scan.confidenceScore.label}

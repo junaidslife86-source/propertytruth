@@ -10,11 +10,19 @@ export type OfferReadinessStatus =
 export interface OfferReadiness {
   readinessPercent: number;
   status: OfferReadinessStatus;
+  statusLabel: string;
   blockers: string[];
   warnings: string[];
   completedItems: string[];
   recommendedNextActions: string[];
 }
+
+const STATUS_LABEL: Record<OfferReadinessStatus, string> = {
+  not_ready: "Checks incomplete",
+  partially_ready: "Partially complete",
+  ready_with_caution: "Verify before offering",
+  ready: "Checklist mostly complete",
+};
 
 export function calculateOfferReadiness(
   scan: PropertyScanResult,
@@ -32,11 +40,11 @@ export function calculateOfferReadiness(
   );
 
   for (const s of highSignals) {
-    warnings.push(`${s.title} — review before offering`);
+    warnings.push(`${s.title} — verify with a professional before offering`);
   }
 
   if (highSignals.length >= 2) {
-    blockers.push("Multiple high-severity risk signals unresolved");
+    blockers.push("Multiple high-severity signals to verify with professionals");
   }
 
   const contract = ddItems.find((i) => i.id === "dd-contract");
@@ -94,6 +102,7 @@ export function calculateOfferReadiness(
   return {
     readinessPercent: Math.min(100, readinessPercent),
     status,
+    statusLabel: STATUS_LABEL[status],
     blockers,
     warnings,
     completedItems,

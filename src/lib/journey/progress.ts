@@ -54,7 +54,7 @@ export function calculateJourneyProgress(
           stage,
           label,
           status: exploreStatus,
-          summary: `Confidence score ${score}/100 based on available public data.`,
+          summary: `Due diligence coverage ${score}% based on checks completed so far.`,
           missingItems:
             unknowns > 0
               ? [`${unknowns} data gap(s) to review`]
@@ -94,7 +94,7 @@ export function calculateJourneyProgress(
           summary:
             offerStatus === "blocked"
               ? "Critical checks incomplete — review before offering."
-              : "Review offer readiness gate.",
+              : "Review pre-offer checklist.",
           missingItems:
             offerStatus === "blocked"
               ? ["Resolve high-severity signals", "Complete required DD items"]

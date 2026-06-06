@@ -127,7 +127,7 @@ export type ComparisonRow =
   | "next_action";
 
 export const COMPARISON_ROWS: { id: ComparisonRow; label: string }[] = [
-  { id: "confidence", label: "Confidence score" },
+  { id: "confidence", label: "Review coverage" },
   { id: "planning", label: "Planning risk" },
   { id: "flood", label: "Flood risk" },
   { id: "bushfire", label: "Bushfire risk" },

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Camera, ImagePlus, Loader2, X } from "lucide-react";
 import type { InspectionPhoto } from "@/lib/inspection/schemas";
+import { inspectionRequestHeaders } from "@/lib/auth/api-headers";
 
 interface PhotoUploadProps {
   photos: InspectionPhoto[];
@@ -33,6 +34,7 @@ export function PhotoUpload({
 
       const res = await fetch(`/api/inspections/${inspectionId}/photos`, {
         method: "POST",
+        headers: await inspectionRequestHeaders(),
         body: formData,
       });
 

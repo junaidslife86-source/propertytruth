@@ -96,11 +96,11 @@ export function generateStrataSummary(
     confidenceLabel,
     headline:
       confidenceLabel === "high_concern"
-        ? "Multiple material strata concerns identified in analysed sections"
+        ? "Multiple material items to verify in analysed sections"
         : confidenceLabel === "proceed_with_caution"
-          ? "Some strata concerns warrant professional review before offering"
+          ? "Some items warrant professional verification in analysed sections"
           : confidenceLabel === "incomplete_review"
-            ? "Limited sections detected — review may be incomplete"
+            ? "Limited sections detected — scan may be incomplete"
             : "No major red flags in analysed sections based on available text",
     topRisks,
     positives,

@@ -9,6 +9,7 @@ export async function createInspectionFirestore(
     propertyType: PropertyType;
     selectedRooms: RoomType[];
     clientSessionId: string | null;
+    userId?: string | null;
     checklist: { roomType: RoomType; key: string; label: string }[];
   },
 ): Promise<string> {
@@ -19,6 +20,7 @@ export async function createInspectionFirestore(
     propertyAddress: input.propertyAddress,
     propertyType: input.propertyType,
     clientSessionId: input.clientSessionId,
+    userId: input.userId ?? null,
     status: "in_progress",
     createdAt: now,
     updatedAt: now,

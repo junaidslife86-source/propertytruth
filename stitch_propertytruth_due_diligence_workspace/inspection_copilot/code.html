@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Inspection Copilot | PropertyTruth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "evidence-verify": "#F59E0B",
+                        "background-primary": "#FFFFFF",
+                        "evidence-issue": "#EF4444",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#86f2e4",
+                        "on-secondary-fixed-variant": "#005049",
+                        "background": "#f8f9ff",
+                        "background-secondary": "#F1F5F9",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "surface-container": "#e5eeff",
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006a61",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "evidence-positive": "#10B981",
+                        "on-secondary-container": "#006f66",
+                        "tertiary-container": "#191c1e",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#818486",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#89f5e7",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "inverse-primary": "#bec6e0",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "evidence-missing": "#94A3B8",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "outline": "#76777d",
+                        "on-secondary-fixed": "#00201d",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "inverse-surface": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "1rem",
+                        "stack-xl": "3rem",
+                        "gutter": "1rem",
+                        "stack-sm": "0.5rem",
+                        "container-margin": "1.25rem",
+                        "stack-lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-container">
+<!-- Top App Bar -->
+<header class="bg-background dark:bg-on-background fixed top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="gavel">gavel</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">PropertyTruth</h1>
+</div>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant dark:text-on-primary-container font-label-caps text-label-caps hover:opacity-80 transition-opacity" href="#">Search</a>
+<a class="text-on-surface-variant dark:text-on-primary-container font-label-caps text-label-caps hover:opacity-80 transition-opacity" href="#">Shortlist</a>
+<a class="text-on-surface-variant dark:text-on-primary-container font-label-caps text-label-caps hover:opacity-80 transition-opacity" href="#">Compare</a>
+<a class="text-primary dark:text-primary-fixed font-bold font-label-caps text-label-caps hover:opacity-80 transition-opacity" href="#">Inspect</a>
+<a class="text-on-surface-variant dark:text-on-primary-container font-label-caps text-label-caps hover:opacity-80 transition-opacity" href="#">Docs</a>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-40 px-container-margin max-w-3xl mx-auto min-h-screen">
+<!-- Hero Header -->
+<section class="mb-stack-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-1">Inspection Copilot</h2>
+<p class="font-body-md text-on-surface-variant">Capture what you see at the open home.</p>
+</section>
+<!-- Global Progress Tracker -->
+<div class="bg-surface-container-lowest rounded-xl p-stack-md shadow-sm border border-outline-variant/30 mb-stack-lg flex items-center gap-stack-md">
+<div class="relative w-16 h-16 shrink-0">
+<svg class="w-full h-full">
+<circle class="text-outline-variant/20" cx="32" cy="32" fill="transparent" r="26" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-secondary progress-ring-circle" cx="32" cy="32" fill="transparent" r="26" stroke="currentColor" stroke-dasharray="163.36" stroke-dashoffset="93" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-label-caps text-[10px] font-bold text-secondary">43%</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-1">
+<span class="font-headline-md text-headline-md text-on-surface">18 <span class="text-on-surface-variant font-body-sm">of 42 checks</span></span>
+</div>
+<div class="w-full bg-outline-variant/20 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 43%;"></div>
+</div>
+</div>
+</div>
+<!-- Room Checklist -->
+<div class="space-y-stack-lg">
+<!-- Kitchen Section -->
+<div class="space-y-stack-md">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="restaurant">restaurant</span>
+<h3 class="font-headline-md text-headline-md">Kitchen</h3>
+</div>
+<div class="space-y-stack-sm">
+<!-- Item: Water Pressure -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="font-body-md font-medium text-on-surface">Water pressure</span>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined text-outline" data-icon="add_a_photo">add_a_photo</span></button>
+<button class="p-1 hover:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined text-outline" data-icon="edit_note">edit_note</span></button>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg hover:bg-secondary-container hover:border-secondary transition-all">OK</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg hover:bg-error-container hover:border-error transition-all">MINOR</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg hover:bg-error-container hover:border-error transition-all">MAJOR</button>
+<button class="font-label-caps text-[10px] py-2 bg-surface-container text-on-surface-variant rounded-lg">NOT CHECKED</button>
+</div>
+</div>
+<!-- Item: Under-sink leaks -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="font-body-md font-medium text-on-surface">Under-sink leaks</span>
+<div class="flex gap-2">
+<button class="p-1 text-secondary-container bg-on-secondary-fixed-variant rounded-full"><span class="material-symbols-outlined text-[18px]" data-icon="check_circle" data-weight="fill">check_circle</span></button>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="font-label-caps text-[10px] py-2 bg-secondary text-white rounded-lg">OK</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg opacity-40">MINOR</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg opacity-40">MAJOR</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg opacity-40">NOT CHECKED</button>
+</div>
+</div>
+<!-- Item: Cabinet Swelling -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="font-body-md font-medium text-on-surface">Cabinet swelling</span>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined text-outline" data-icon="add_a_photo">add_a_photo</span></button>
+<button class="p-1 hover:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined text-outline" data-icon="edit_note">edit_note</span></button>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg">OK</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg">MINOR</button>
+<button class="font-label-caps text-[10px] py-2 border border-outline-variant rounded-lg">MAJOR</button>
+<button class="font-label-caps text-[10px] py-2 bg-surface-container text-on-surface-variant rounded-lg">NOT CHECKED</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bathroom Section -->
+<div class="space-y-stack-md">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="bathtub">bathtub</span>
+<h3 class="font-headline-md text-headline-md">Bathroom</h3>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-4 border-l-4 border-error shadow-sm">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-body-md font-medium text-on-surface">Mould</p>
+<p class="text-error font-label-caps text-[10px]">MAJOR ISSUE RECORDED</p>
+</div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-lg border-2 border-white overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A close-up high-resolution photograph showing dark grey mould patches in the corner of a white tiled bathroom wall. The lighting is harsh and clinical, emphasizing the texture of the fungal growth against the pristine ceramic grout. The overall aesthetic is surgical and forensic, fitting a property due diligence report style with high contrast and sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5UtPIbKQv-dGjBgGfuCVxwFGP2bzOUCZ1mgLB1QfatSPqyyYdqaEbI4OUPz9yCuoH6gkhP10BZLWw7uwBclDQPGsKcBtP8R3qJQgiMmkrk4FeB5_bJBgYaZMbsluqpmxKxgNUgjHGydBqo3ZDoM4WifxjNsjx89ljVcIAEAlNzooyp18KqFJJByZZ99T0C6v0Ch0us9kgyHse3-yA71zcTnu3jugkh5qa3WUSzMIyAN9Er8TlsDRrAYy6-rZzECweY62vdEA39lE"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Other Bathroom items collapsed/simplified for UI density -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/20 shadow-sm flex justify-between items-center">
+<span class="font-body-md text-on-surface">Exhaust fan &amp; Grout condition</span>
+<span class="font-label-caps text-on-surface-variant text-[10px]">2 CHECKS REMAINING</span>
+</div>
+</div>
+<!-- Balcony Section -->
+<div class="space-y-stack-md">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="deck">deck</span>
+<h3 class="font-headline-md text-headline-md">Balcony</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-sm">
+<button class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 text-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined block mb-1 text-on-surface-variant" data-icon="water_drop">water_drop</span>
+<span class="font-label-caps text-[10px]">Drainage</span>
+</button>
+<button class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 text-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined block mb-1 text-on-surface-variant" data-icon="mfg_cp">face</span>
+<span class="font-label-caps text-[10px]">Cracks</span>
+</button>
+<button class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 text-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined block mb-1 text-on-surface-variant" data-icon="format_paint">format_paint</span>
+<span class="font-label-caps text-[10px]">Rust</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual Summary Panel -->
+<div class="fixed bottom-[72px] left-0 w-full px-container-margin z-40 md:max-w-3xl md:left-1/2 md:-translate-x-1/2">
+<div class="bg-on-background text-white rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4 backdrop-blur-md bg-opacity-95 border border-white/10">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-white/60">COMPLETION</span>
+<span class="font-headline-md text-secondary">43%</span>
+</div>
+<div class="h-8 w-[1px] bg-white/20"></div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-white/60">MAJOR</span>
+<span class="font-headline-md text-evidence-issue">1</span>
+</div>
+<div class="h-8 w-[1px] bg-white/20"></div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-white/60">QUESTIONS</span>
+<span class="font-headline-md text-evidence-verify">3</span>
+</div>
+</div>
+<button class="bg-secondary text-white font-label-caps text-[12px] px-6 py-3 rounded-full hover:opacity-90 active:scale-95 transition-all">
+                FINISH
+            </button>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe pt-2 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-on-tertiary-container shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-caps text-label-caps mt-1">Shortlist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-label-caps text-label-caps mt-1">Compare</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="font-label-caps text-label-caps mt-1">Inspect</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps mt-1">Docs</span>
+</a>
+</nav>
+<script>
+        // Simple ripple-like effect on progress update
+        document.querySelectorAll('.grid button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.add('scale-95');
+                setTimeout(() => btn.classList.remove('scale-95'), 100);
+            });
+        });
+    </script>
+</body></html>

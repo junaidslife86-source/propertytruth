@@ -14,7 +14,7 @@ interface PaidReportPreviewProps {
 const LOCKED_SECTIONS = [
   "Full environmental overlay analysis",
   "Strata red-flag deep dive",
-  "Offer readiness checklist (PDF)",
+  "Pre-offer checklist (PDF)",
   "Evidence appendix with source links",
   "Shareable link for conveyancer",
 ];
@@ -32,8 +32,8 @@ export function PaidReportPreview({ scan }: PaidReportPreviewProps) {
               Property Truth Report
             </h2>
             <p className="mt-2 max-w-md text-sm text-stone-300">
-              Download a professional PDF with confidence score, risk signals,
-              due diligence checklist and recommended next actions.
+              Download a PDF with due diligence coverage, known issues,
+              checklist progress and suggested questions for professionals.
             </p>
           </div>
           <div className="rounded-2xl bg-white/10 p-3">
@@ -52,7 +52,7 @@ export function PaidReportPreview({ scan }: PaidReportPreviewProps) {
           <span className="font-medium text-stone-800">
             {scan.formattedAddress}
           </span>{" "}
-          — score {scan.confidenceScore.score}/100 (
+          — coverage snapshot from public data checked (
           {scan.confidenceScore.label}).
         </p>
 
@@ -74,13 +74,13 @@ export function PaidReportPreview({ scan }: PaidReportPreviewProps) {
             Unlock full report
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/strata/upload">Try Strata AI (free demo)</Link>
+            <Link href="/strata/upload">Try strata red flag scan (demo)</Link>
           </Button>
         </div>
 
         <p className="text-xs text-stone-400">
-          Stripe checkout coming soon. Free snapshot includes confidence score
-          and public-data risk signals. Not legal, financial or building advice.
+          Stripe checkout coming soon. Free workspace includes coverage tracking
+          and public-data signals. Not legal, financial or building advice.
         </p>
       </CardContent>
     </Card>

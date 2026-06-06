@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Strata Ask | PropertyTruth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "evidence-verify": "#F59E0B",
+                        "background-primary": "#FFFFFF",
+                        "evidence-issue": "#EF4444",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#86f2e4",
+                        "on-secondary-fixed-variant": "#005049",
+                        "background": "#f8f9ff",
+                        "background-secondary": "#F1F5F9",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "surface-container": "#e5eeff",
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006a61",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "evidence-positive": "#10B981",
+                        "on-secondary-container": "#006f66",
+                        "tertiary-container": "#191c1e",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#818486",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#89f5e7",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "inverse-primary": "#bec6e0",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "evidence-missing": "#94A3B8",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "outline": "#76777d",
+                        "on-secondary-fixed": "#00201d",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "inverse-surface": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "1rem",
+                        "stack-xl": "3rem",
+                        "gutter": "1rem",
+                        "stack-sm": "0.5rem",
+                        "container-margin": "1.25rem",
+                        "stack-lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tap-highlight-transparent { -webkit-tap-highlight-color: transparent; }
+        .backdrop-glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-on-background fixed top-0 left-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="gavel">gavel</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">PropertyTruth</h1>
+</div>
+<div class="hidden md:flex gap-6 items-center">
+<nav class="flex gap-4">
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Search</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Shortlist</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Compare</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Inspect</a>
+<a class="text-primary dark:text-primary-fixed font-bold hover:opacity-80 transition-opacity font-body-sm" href="#">Docs</a>
+</nav>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male property analyst with a confident and friendly expression. He is wearing a dark charcoal suit against a clean, soft-lit studio background. The overall aesthetic is high-fidelity and premium, utilizing a cool-toned color palette with subtle highlights that convey reliability and professional expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9TgH1z-LTev5BK8kFWkVRO2ArjULcdjhrH7yaf-ro74VW0IbQn0-bGyoLR34MHcEgZhWsDcWc4A2lwf_oKp8LLIwxL-ayzXFd2M39UQ-Awff_1d0sKMsG-Vm0Bw6EGOQkATJt-zJqR2HIudn23fRRMWdLoYN_PgEyj_vZXywzS2hb4T9Hk4Z0kKeVwaruFgLm2MQ_np3yIRHtpflW63CC5geMo15FDrYdrEOs6qQyFuj6t6ABZflaOzOrTJFYDojnulGSJEwW13A"/>
+</div>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<main class="flex-1 pt-20 pb-32 max-w-2xl mx-auto w-full px-container-margin">
+<!-- Header Section -->
+<section class="mb-stack-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background mb-stack-sm">Strata Ask</h2>
+<p class="font-body-sm text-on-surface-variant leading-relaxed">Query the verified strata report for this property. Evidence is extracted from over 450 pages of legal and financial records.</p>
+</section>
+<!-- Chat History Area -->
+<div class="space-y-stack-md mb-stack-lg">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="bg-primary-container text-on-primary-container px-4 py-3 rounded-2xl rounded-tr-none max-w-[85%] shadow-sm">
+<p class="font-body-md">Are there water ingress issues mentioned in the minutes?</p>
+</div>
+</div>
+<!-- AI Evidence Card (The Answer) -->
+<div class="flex justify-start">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl rounded-tl-none p-5 max-w-[95%] shadow-[0_20px_20px_rgba(0,0,0,0.03)] border-l-4 border-l-evidence-issue">
+<div class="flex items-center gap-2 mb-stack-sm">
+<span class="material-symbols-outlined text-evidence-issue text-[20px]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Evidence Detected</span>
+</div>
+<p class="font-body-md text-on-surface mb-stack-md leading-relaxed">
+                        Evidence of water ingress-related wording was found in processed pages. This does not confirm whether the issue is ongoing or resolved.
+                    </p>
+<div class="space-y-3">
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-body-sm text-on-surface-variant">Sources:</span>
+<button class="bg-surface-container-high hover:bg-surface-container-highest px-3 py-1 rounded-lg flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps">Page 214</span>
+</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest px-3 py-1 rounded-lg flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps">Page 232</span>
+</button>
+</div>
+<div class="bg-surface-container-low p-3 rounded-xl border border-outline-variant/30">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary mt-0.5 text-[18px]" data-icon="lightbulb">lightbulb</span>
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-1">Suggested Next Question</p>
+<button class="font-body-sm text-left text-on-surface hover:text-secondary transition-colors underline decoration-outline-variant underline-offset-4">
+                                        Ask your strata inspector whether this issue has been independently closed.
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Loading State Placeholder (Visual Interest) -->
+<div class="flex justify-start animate-pulse">
+<div class="bg-surface-container-low h-12 w-24 rounded-2xl rounded-tl-none flex items-center justify-center gap-1">
+<div class="w-1.5 h-1.5 bg-outline-variant rounded-full"></div>
+<div class="w-1.5 h-1.5 bg-outline-variant rounded-full"></div>
+<div class="w-1.5 h-1.5 bg-outline-variant rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Suggestion Chips -->
+<div class="mb-stack-lg">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm px-1">TAP TO ASK</p>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface font-body-sm hover:bg-secondary-container hover:border-secondary transition-all tap-highlight-transparent active:scale-95">Are there special levies?</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface font-body-sm hover:bg-secondary-container hover:border-secondary transition-all tap-highlight-transparent active:scale-95">Are pets allowed?</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface font-body-sm hover:bg-secondary-container hover:border-secondary transition-all tap-highlight-transparent active:scale-95">Are there water ingress issues?</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface font-body-sm hover:bg-secondary-container hover:border-secondary transition-all tap-highlight-transparent active:scale-95">Can I renovate?</button>
+</div>
+</div>
+</main>
+<!-- Bottom Input Area (Fixed) -->
+<div class="fixed bottom-[72px] left-0 w-full px-container-margin pb-4 z-40 bg-gradient-to-t from-background via-background to-transparent pt-8">
+<div class="max-w-2xl mx-auto flex items-center gap-2">
+<div class="relative flex-1">
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest border-outline-variant rounded-xl shadow-lg focus:ring-2 focus:ring-secondary focus:border-secondary font-body-md placeholder:text-outline" placeholder="Search address..." type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+</div>
+<button class="w-14 h-14 bg-secondary text-white rounded-xl shadow-lg flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe pt-2 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-on-tertiary-container shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-caps text-label-caps">Shortlist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-label-caps text-label-caps">Compare</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-caps text-label-caps">Inspect</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="description" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-label-caps text-label-caps">Docs</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for chips
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Haptic simulation logic could go here
+                console.log('Action triggered:', btn.innerText);
+            });
+        });
+    </script>
+</body></html>

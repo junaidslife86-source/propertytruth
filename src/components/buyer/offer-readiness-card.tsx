@@ -1,92 +1,91 @@
 "use client";
 
 import type { OfferReadiness } from "@/lib/offer/readiness";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ShieldCheck, AlertTriangle } from "lucide-react";
+import { OFFER_CHECKLIST_DISCLAIMER } from "@/lib/compliance/copy";
+import { ContextualDisclaimer } from "@/components/compliance/contextual-disclaimer";
+import { ClipboardList } from "lucide-react";
 
-interface OfferReadinessCardProps {
+interface PreOfferChecklistCardProps {
   readiness: OfferReadiness;
 }
 
-const statusLabel: Record<OfferReadiness["status"], string> = {
-  not_ready: "Not ready to offer",
-  partially_ready: "Partially ready",
-  ready_with_caution: "Ready with caution",
-  ready: "Ready to discuss offer",
-};
-
-const statusVariant: Record<
-  OfferReadiness["status"],
-  "high" | "medium" | "low" | "default"
-> = {
-  not_ready: "high",
-  partially_ready: "medium",
-  ready_with_caution: "medium",
-  ready: "low",
-};
-
-export function OfferReadinessCard({ readiness }: OfferReadinessCardProps) {
-  const angle = (readiness.readinessPercent / 100) * 360;
+export function PreOfferChecklistCard({ readiness }: PreOfferChecklistCardProps) {
+  const circumference = 2 * Math.PI * 42;
+  const offset =
+    circumference - (readiness.readinessPercent / 100) * circumference;
 
   return (
-    <Card className="overflow-hidden border-stone-200/80 bg-gradient-to-br from-stone-50 to-white">
-      <CardContent className="p-6">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-stone-500" />
-              <h3 className="text-lg font-semibold text-stone-900">
-                Offer readiness gate
-              </h3>
-            </div>
-            <Badge variant={statusVariant[readiness.status]}>
-              {statusLabel[readiness.status]}
-            </Badge>
-            {readiness.blockers.length > 0 && (
-              <ul className="space-y-1">
-                {readiness.blockers.map((b) => (
-                  <li
-                    key={b}
-                    className="flex items-start gap-2 text-sm text-orange-800"
-                  >
-                    <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                    {b}
-                  </li>
+    <div className="overflow-hidden rounded-xl border border-outline-variant/20 bg-white p-6 shadow-sm">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-5 w-5 text-secondary" />
+            <h3 className="font-[family-name:var(--font-manrope)] text-lg font-semibold">
+              Pre-offer checklist
+            </h3>
+          </div>
+          <span className="inline-flex rounded-full bg-evidence-verify/10 px-3 py-1 font-label-caps text-evidence-verify">
+            {readiness.statusLabel}
+          </span>
+          {readiness.blockers.length > 0 && (
+            <ul className="space-y-1">
+              {readiness.blockers.map((b) => (
+                <li key={b} className="text-sm text-evidence-issue">
+                  • {b}
+                </li>
+              ))}
+            </ul>
+          )}
+          {readiness.recommendedNextActions.length > 0 && (
+            <div>
+              <p className="mb-1 font-label-caps text-on-surface-variant">
+                Suggested next steps
+              </p>
+              <ul className="space-y-1 text-sm text-on-surface-variant">
+                {readiness.recommendedNextActions.map((a) => (
+                  <li key={a}>→ {a}</li>
                 ))}
               </ul>
-            )}
-            {readiness.recommendedNextActions.length > 0 && (
-              <div>
-                <p className="mb-1 text-xs font-medium uppercase text-stone-400">
-                  Next actions
-                </p>
-                <ul className="space-y-1 text-sm text-stone-600">
-                  {readiness.recommendedNextActions.map((a) => (
-                    <li key={a}>→ {a}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="relative mx-auto flex h-28 w-28 shrink-0 items-center justify-center">
-            <div
-              className="absolute inset-0 rounded-full"
+            </div>
+          )}
+        </div>
+        <div className="relative mx-auto h-28 w-28 shrink-0">
+          <svg className="h-full w-full" viewBox="0 0 100 100">
+            <circle
+              cx="50"
+              cy="50"
+              r="42"
+              fill="transparent"
+              strokeWidth="8"
+              className="stroke-[#e5eeff]"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="42"
+              fill="transparent"
+              strokeWidth="8"
+              strokeLinecap="round"
+              className="progress-ring-circle stroke-secondary"
               style={{
-                background: `conic-gradient(#57534e ${angle}deg, #e7e5e4 ${angle}deg)`,
+                strokeDasharray: circumference,
+                strokeDashoffset: offset,
               }}
             />
-            <div className="absolute inset-2 flex flex-col items-center justify-center rounded-full bg-white shadow-inner">
-              <span className="text-2xl font-semibold tabular-nums">
-                {readiness.readinessPercent}%
-              </span>
-            </div>
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-2xl font-semibold tabular-nums">
+              {readiness.readinessPercent}%
+            </span>
           </div>
         </div>
-        <p className="mt-4 text-xs text-stone-400">
-          Does not replace advice from your conveyancer, broker or inspector.
-        </p>
-      </CardContent>
-    </Card>
+      </div>
+      <ContextualDisclaimer className="mt-4">
+        {OFFER_CHECKLIST_DISCLAIMER}
+      </ContextualDisclaimer>
+    </div>
   );
 }
+
+/** @deprecated Use PreOfferChecklistCard */
+export const OfferReadinessCard = PreOfferChecklistCard;

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>PropertyTruth — 47 Hill Road Issues</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#d3e4fe",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-low": "#eff4ff",
+                    "error": "#ba1a1a",
+                    "evidence-verify": "#F59E0B",
+                    "background-primary": "#FFFFFF",
+                    "evidence-issue": "#EF4444",
+                    "on-background": "#0b1c30",
+                    "secondary-container": "#86f2e4",
+                    "on-secondary-fixed-variant": "#005049",
+                    "background": "#f8f9ff",
+                    "background-secondary": "#F1F5F9",
+                    "on-primary-fixed": "#131b2e",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#000000",
+                    "surface-container": "#e5eeff",
+                    "outline-variant": "#c6c6cd",
+                    "primary-container": "#131b2e",
+                    "on-tertiary-fixed": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "secondary": "#006a61",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-surface": "#0b1c30",
+                    "on-secondary": "#ffffff",
+                    "evidence-positive": "#10B981",
+                    "on-secondary-container": "#006f66",
+                    "tertiary-container": "#191c1e",
+                    "tertiary-fixed": "#e0e3e5",
+                    "surface-container-high": "#dce9ff",
+                    "on-tertiary-container": "#818486",
+                    "secondary-fixed-dim": "#6bd8cb",
+                    "on-primary-container": "#7c839b",
+                    "tertiary": "#000000",
+                    "on-surface-variant": "#45464d",
+                    "secondary-fixed": "#89f5e7",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "surface-dim": "#cbdbf5",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "inverse-primary": "#bec6e0",
+                    "surface-variant": "#d3e4fe",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "evidence-missing": "#94A3B8",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-tint": "#565e74",
+                    "outline": "#76777d",
+                    "on-secondary-fixed": "#00201d",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "inverse-surface": "#213145"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "1rem",
+                    "stack-xl": "3rem",
+                    "gutter": "1rem",
+                    "stack-sm": "0.5rem",
+                    "container-margin": "1.25rem",
+                    "stack-lg": "2rem"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Manrope"],
+                    "headline-md": ["Manrope"],
+                    "label-caps": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Manrope"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .tap-highlight-transparent { -webkit-tap-highlight-color: transparent; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24 font-body-md">
+<!-- Top Navigation Anchor -->
+<header class="sticky top-0 z-50 bg-background dark:bg-on-background">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="gavel">gavel</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">PropertyTruth</span>
+</div>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Summary</a>
+<a class="text-primary dark:text-primary-fixed font-bold hover:opacity-80 transition-opacity font-body-sm" href="#">Issues</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Map</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity font-body-sm" href="#">Documents</a>
+</div>
+<button class="material-symbols-outlined p-2 hover:opacity-80 transition-opacity" data-icon="account_circle">account_circle</button>
+</div>
+<!-- Property Sub-header (Context Lock) -->
+<div class="px-container-margin pb-4 max-w-7xl mx-auto">
+<div class="flex flex-col gap-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">47 Hill Road</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Due Diligence Report • Updated 2h ago</p>
+</div>
+<!-- Filter Chips - Mobile Scrollable -->
+<div class="flex overflow-x-auto gap-2 mt-4 pb-2 hide-scrollbar">
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-primary text-on-primary font-body-sm">All</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-sm">Financial</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-sm">Building</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-sm">Strata</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-sm">By-laws</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-sm">Planning</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-body-sm">Missing</button>
+</div>
+</div>
+</header>
+<main class="px-container-margin py-stack-md max-w-3xl mx-auto space-y-6">
+<!-- Critical Issue: Evidence Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-evidence-issue"></div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-evidence-issue" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-caps text-label-caps text-evidence-issue">ISSUE FOUND</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-1">Water ingress mentioned</h2>
+</div>
+<button class="material-symbols-outlined text-outline" data-icon="more_vert">more_vert</button>
+</div>
+<div class="space-y-4">
+<section>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-1">WHY IT MAY MATTER</h3>
+<p class="font-body-md text-body-md text-on-surface">Water ingress can indicate waterproofing, facade, balcony or roof issues that may be expensive if recurring.</p>
+</section>
+<div class="bg-surface-container-low rounded-lg p-4 border-l-4 border-outline">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="description">description</span>
+                        EVIDENCE
+                    </h3>
+<p class="font-body-sm text-body-sm italic text-on-surface-variant">“Page 214: water ingress / leak-related wording found in the strata report.”</p>
+<button class="mt-2 text-secondary font-body-sm font-semibold flex items-center gap-1">
+                        View Source <span class="material-symbols-outlined text-[16px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<h3 class="font-label-caps text-label-caps text-evidence-missing">WHAT REMAINS UNKNOWN</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Whether the issue has since been remediated and independently verified.</p>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-label-caps text-label-caps text-secondary">ASK</h3>
+<p class="font-body-sm text-body-sm text-on-surface">Conveyancer or strata inspector</p>
+</div>
+</div>
+<div class="bg-secondary-container/30 rounded-lg p-4 flex flex-col gap-2">
+<h3 class="font-label-caps text-label-caps text-on-secondary-container">SUGGESTED QUESTION</h3>
+<p class="font-body-md text-body-md font-medium text-on-secondary-container">“Has this issue been fully remediated, funded and formally closed?”</p>
+<button class="w-full mt-2 py-3 bg-secondary text-on-secondary rounded-lg font-body-sm font-bold flex justify-center items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="content_copy">content_copy</span>
+                        Copy Question
+                    </button>
+</div>
+</div>
+</div>
+<!-- Secondary Informational Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-evidence-verify"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-evidence-verify" data-icon="info" style="font-variation-settings: 'FILL' 1;">info</span>
+<span class="font-label-caps text-label-caps text-evidence-verify">NEEDS VERIFICATION</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Outstanding Special Levy</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">A proposed $12,000 levy for remedial window works is mentioned in 2023 AGM minutes. Status of payment by current owner is unconfirmed.</p>
+<div class="flex gap-2">
+<span class="bg-surface-container px-3 py-1 rounded-full text-label-caps text-on-surface-variant">Financial</span>
+<span class="bg-surface-container px-3 py-1 rounded-full text-label-caps text-on-surface-variant">Strata</span>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="bg-background-secondary rounded-xl p-6 flex flex-col items-center gap-4 text-center">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-outline-variant" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-dasharray="226.2" stroke-dashoffset="67.8" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-bold text-on-surface">70%</div>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md">Review in progress</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">14 of 20 verified data points processed for 47 Hill Road.</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe pt-2 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-on-tertiary-container shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-caps text-label-caps mt-1">Shortlist</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="font-label-caps text-label-caps mt-1">Inspect</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-label-caps text-label-caps mt-1">Compare</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps mt-1">Docs</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-container-margin flex flex-col md:flex-row justify-between items-center gap-stack-md bg-background-secondary dark:bg-on-tertiary-fixed border-t border-outline-variant mt-stack-xl">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="font-label-caps text-label-caps text-primary">PropertyTruth</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center md:text-left">PropertyTruth © 2024 | Evidence over Opinion. All data sourced from verified property records.</p>
+</div>
+<div class="flex gap-4">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-sm" href="#">Data Methodology</a>
+</div>
+</footer>
+<script>
+        // Micro-interaction for filter chips
+        const chips = document.querySelectorAll('.flex.overflow-x-auto button');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => {
+                    c.classList.remove('bg-primary', 'text-on-primary');
+                    c.classList.add('bg-surface-container', 'text-on-surface-variant');
+                });
+                chip.classList.remove('bg-surface-container', 'text-on-surface-variant');
+                chip.classList.add('bg-primary', 'text-on-primary');
+            });
+        });
+    </script>
+</body></html>

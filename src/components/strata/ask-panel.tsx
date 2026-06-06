@@ -5,6 +5,7 @@ import { MessageCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { strataRequestHeaders } from "@/lib/auth/api-headers";
 import { STRATA_DISCLAIMER } from "@/lib/strata/schemas";
 
 interface AskPanelProps {
@@ -38,7 +39,10 @@ export function StrataAskPanel({ documentId }: AskPanelProps) {
     try {
       const res = await fetch(`/api/strata/${documentId}/ask`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...(await strataRequestHeaders()),
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ question: text }),
       });
       const data = await res.json();

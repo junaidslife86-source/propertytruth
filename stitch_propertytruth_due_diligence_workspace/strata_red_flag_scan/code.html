@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PropertyTruth | Strata Red Flag Scan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "evidence-verify": "#F59E0B",
+                        "background-primary": "#FFFFFF",
+                        "evidence-issue": "#EF4444",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#86f2e4",
+                        "on-secondary-fixed-variant": "#005049",
+                        "background": "#f8f9ff",
+                        "background-secondary": "#F1F5F9",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "surface-container": "#e5eeff",
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006a61",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "evidence-positive": "#10B981",
+                        "on-secondary-container": "#006f66",
+                        "tertiary-container": "#191c1e",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#818486",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#89f5e7",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "inverse-primary": "#bec6e0",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "evidence-missing": "#94A3B8",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "outline": "#76777d",
+                        "on-secondary-fixed": "#00201d",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "inverse-surface": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "1rem",
+                        "stack-xl": "3rem",
+                        "gutter": "1rem",
+                        "stack-sm": "0.5rem",
+                        "container-margin": "1.25rem",
+                        "stack-lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="bg-background dark:bg-on-background flex justify-between items-center w-full px-container-margin py-4 max-w-7xl mx-auto z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-size: 24px;">gavel</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">PropertyTruth</span>
+</div>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Overview</a>
+<a class="text-primary dark:text-primary-fixed font-bold" href="#">Strata</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Market</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Neighborhood</a>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-variant rounded-full transition-colors">account_circle</button>
+</header>
+<!-- Content Canvas -->
+<main class="flex-grow w-full max-w-2xl mx-auto px-container-margin pb-32">
+<!-- Scan Header Card -->
+<section class="mt-stack-lg bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant">
+<div class="flex justify-between items-start mb-stack-sm">
+<div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile mb-1">Strata Red Flag Scan</h1>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+<p class="font-body-sm text-body-sm truncate max-w-[200px]">SP87607 ATTACH[1].pdf</p>
+</div>
+</div>
+<div class="bg-evidence-positive/10 text-evidence-positive px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-caps text-label-caps">Complete</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mt-4">
+<div class="bg-evidence-positive h-full w-full"></div>
+</div>
+<p class="text-right font-label-caps text-label-caps mt-1 text-on-surface-variant">456 / 456 Pages</p>
+<div class="mt-stack-md p-3 bg-surface-container rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI-assisted scan. Not a substitute for professional review.</p>
+</div>
+</section>
+<!-- Risk Distribution Stat Rings -->
+<section class="mt-stack-lg flex justify-between gap-stack-md">
+<div class="flex-1 bg-surface-container-lowest p-stack-sm rounded-xl border border-outline-variant flex flex-col items-center justify-center text-center">
+<span class="text-evidence-issue font-headline-lg">2</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">High Concern</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest p-stack-sm rounded-xl border border-outline-variant flex flex-col items-center justify-center text-center">
+<span class="text-evidence-verify font-headline-lg">5</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">To Verify</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest p-stack-sm rounded-xl border border-outline-variant flex flex-col items-center justify-center text-center">
+<span class="text-evidence-missing font-headline-lg">2</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Missing</span>
+</div>
+</section>
+<!-- Coverage Pills -->
+<section class="mt-stack-lg">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-stack-sm">Document Coverage</h2>
+<div class="flex flex-wrap gap-2">
+<div class="px-3 py-1.5 bg-evidence-positive/10 text-evidence-positive rounded-full border border-evidence-positive/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+<span class="font-body-sm text-body-sm font-medium">Financials</span>
+</div>
+<div class="px-3 py-1.5 bg-evidence-positive/10 text-evidence-positive rounded-full border border-evidence-positive/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+<span class="font-body-sm text-body-sm font-medium">By-laws</span>
+</div>
+<div class="px-3 py-1.5 bg-evidence-positive/10 text-evidence-positive rounded-full border border-evidence-positive/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+<span class="font-body-sm text-body-sm font-medium">Title Search</span>
+</div>
+<div class="px-3 py-1.5 bg-evidence-positive/10 text-evidence-positive rounded-full border border-evidence-positive/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">check</span>
+<span class="font-body-sm text-body-sm font-medium">Defect Report</span>
+</div>
+<div class="px-3 py-1.5 bg-evidence-missing/10 text-evidence-missing rounded-full border border-evidence-missing/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">close</span>
+<span class="font-body-sm text-body-sm font-medium">Insurance</span>
+</div>
+<div class="px-3 py-1.5 bg-evidence-missing/10 text-evidence-missing rounded-full border border-evidence-missing/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">close</span>
+<span class="font-body-sm text-body-sm font-medium">Forecasts</span>
+</div>
+</div>
+</section>
+<!-- Sub-tabs Navigation -->
+<nav class="mt-stack-lg flex overflow-x-auto no-scrollbar border-b border-outline-variant">
+<button class="px-4 py-3 border-b-2 border-primary font-body-md font-semibold text-primary whitespace-nowrap">Overview</button>
+<button class="px-4 py-3 text-on-surface-variant whitespace-nowrap hover:text-primary transition-colors">Financials</button>
+<button class="px-4 py-3 text-on-surface-variant whitespace-nowrap hover:text-primary transition-colors">Defects</button>
+<button class="px-4 py-3 text-on-surface-variant whitespace-nowrap hover:text-primary transition-colors">By-laws</button>
+<button class="px-4 py-3 text-on-surface-variant whitespace-nowrap hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+                Ask
+            </button>
+</nav>
+<!-- Overview Cards (Bento-ish) -->
+<section class="mt-stack-md grid grid-cols-1 gap-4">
+<!-- Red Flag: High Concern -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border-l-4 border-evidence-issue shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-evidence-issue">HIGH CONCERN</span>
+<h3 class="font-headline-md text-headline-md">Water Ingress Mentions</h3>
+</div>
+<span class="material-symbols-outlined text-evidence-issue" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<p class="mt-2 text-on-surface-variant font-body-md">Multiple mentions of "persistent ceiling leaks" in Unit 402 and common area stairwells across last 3 AGM minutes.</p>
+<div class="mt-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">link</span>
+<span class="font-body-sm text-body-sm underline text-on-surface-variant cursor-pointer">Source: AGM Minutes Oct 2023, p.12</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Yellow Flag: Financial -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border-l-4 border-evidence-verify shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-evidence-verify">FINANCIAL</span>
+<h3 class="font-headline-md text-headline-md">Admin Fund Deficit</h3>
+</div>
+<span class="material-symbols-outlined text-evidence-verify">account_balance_wallet</span>
+</div>
+<p class="mt-2 text-on-surface-variant font-body-sm">Balance is currently -$4,200. No special levy proposed in latest minutes to resolve.</p>
+</div>
+<!-- Yellow Flag: Works -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border-l-4 border-evidence-verify shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-evidence-verify">MAINTENANCE</span>
+<h3 class="font-headline-md text-headline-md">Major Works to Verify</h3>
+</div>
+<span class="material-symbols-outlined text-evidence-verify">engineering</span>
+</div>
+<p class="mt-2 text-on-surface-variant font-body-sm">Tender approved for lift replacement (Est. $120k). Funding source not clearly identified.</p>
+</div>
+</div>
+<!-- Green: Policy -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border-l-4 border-evidence-positive shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-evidence-positive">LIFESTYLE</span>
+<h3 class="font-headline-md text-headline-md">Pets Allowed</h3>
+</div>
+<span class="material-symbols-outlined text-evidence-positive">pets</span>
+</div>
+<p class="mt-2 text-on-surface-variant font-body-md">Standard by-law 12 applies: Pets permitted with written consent of the Owners Corporation.</p>
+</div>
+<!-- Yellow Flag: Parking -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border-l-4 border-evidence-verify shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-evidence-verify">RESTRICTION</span>
+<h3 class="font-headline-md text-headline-md">Parking Restrictions</h3>
+</div>
+<span class="material-symbols-outlined text-evidence-verify">local_parking</span>
+</div>
+<p class="mt-2 text-on-surface-variant font-body-sm">Strict 2-hour limit on visitor spaces with active wheel-clamping policy mentioned in special by-laws.</p>
+</div>
+</section>
+<!-- Action Area -->
+<div class="mt-stack-xl flex flex-col gap-4">
+<button class="w-full bg-secondary text-on-secondary font-headline-md py-4 rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">description</span>
+                Generate questions for conveyancer
+            </button>
+<p class="text-center text-on-surface-variant font-body-sm opacity-70">Requires Pro Tier subscription for full legal draft export.</p>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe pt-2 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-on-tertiary-container shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-caps text-label-caps">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label-caps text-label-caps">Shortlist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">compare_arrows</span>
+<span class="font-label-caps text-label-caps">Compare</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="font-label-caps text-label-caps">Inspect</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-caps text-label-caps">Docs</span>
+</a>
+</nav>
+<!-- Floating Action Button (Contextual for Home/Dashboard, but kept for logic demo) -->
+<!-- Suppressed on Details Screen per Shell Visibility Rule -->
+<!-- Footer for Desktop -->
+<footer class="hidden md:flex w-full py-stack-lg px-container-margin bg-background-secondary dark:bg-on-tertiary-fixed border-t border-outline-variant flex-col md:flex-row justify-between items-center gap-stack-md mt-stack-xl">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-primary">PropertyTruth</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-tertiary-container">PropertyTruth © 2024 | Evidence over Opinion.</p>
+</div>
+<div class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-sm" href="#">Data Methodology</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-sm" href="#">Disclaimer</a>
+</div>
+</footer>
+<script>
+        // Micro-interaction for cards
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+
+        // Simple scroll observer for top bar depth effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+            } else {
+                header.classList.remove('shadow-md', 'bg-white/90', 'backdrop-blur-md');
+            }
+        });
+    </script>
+</body></html>

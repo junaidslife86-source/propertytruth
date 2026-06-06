@@ -12,12 +12,14 @@ import {
   useBuyerProfileStore,
   type Dealbreaker,
 } from "@/stores/buyer-profile-store";
+import { useAuth } from "@/providers/auth-provider";
 import { cn } from "@/lib/utils";
 
 const DEALBREAKERS = Object.keys(DEALBREAKER_LABELS) as Dealbreaker[];
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { user, updateUser } = useAuth();
   const profile = useBuyerProfileStore((s) => s.profile);
   const updateProfile = useBuyerProfileStore((s) => s.updateProfile);
 
@@ -38,14 +40,27 @@ export default function OnboardingPage() {
     );
   }
 
-  function handleComplete() {
-    updateProfile({
+  async function handleComplete() {
+    const nextProfile = {
       budgetMax: budgetMax ? Number(budgetMax) : undefined,
       monthlyComfortPayment: comfort ? Number(comfort) : undefined,
       dealbreakers,
       riskAppetite,
       completedOnboarding: true,
-    });
+    };
+    updateProfile(nextProfile);
+
+    if (user) {
+      try {
+        await updateUser({
+          buyerProfile: nextProfile,
+          onboardingCompleted: true,
+        });
+      } catch {
+        // local profile still saved
+      }
+    }
+
     router.push("/");
   }
 

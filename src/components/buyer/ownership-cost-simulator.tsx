@@ -130,6 +130,10 @@ export function OwnershipCostSimulator({
             ))}
           </div>
         </div>
+        <p className="mt-4 text-xs text-on-surface-variant">
+          Educational estimates only. Not financial, tax, credit or investment advice.
+          Confirm affordability with a licensed broker or financial adviser.
+        </p>
       </CardContent>
     </Card>
   );

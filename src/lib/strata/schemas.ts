@@ -2,7 +2,7 @@ import { z } from "zod";
 import { PROCESSING_STATUSES } from "@/lib/strata/processing-status";
 
 export const STRATA_DISCLAIMER =
-  "AI-assisted review. Not a substitute for solicitor, conveyancer, building inspector or strata inspector review.";
+  "AI-assisted document scan. Not a substitute for solicitor, conveyancer, building inspector or strata inspector review.";
 
 export const strataFindingCategorySchema = z.enum([
   "special_levies",
@@ -137,10 +137,10 @@ export const CATEGORY_LABELS: Record<StrataFindingCategory, string> = {
 };
 
 export const CONFIDENCE_LABELS: Record<StrataSummary["confidenceLabel"], string> = {
-  strong: "Mostly clear",
-  mostly_clear: "Mostly clear",
-  proceed_with_caution: "Proceed with caution",
-  high_concern: "High concern",
+  strong: "Mostly checked",
+  mostly_clear: "Mostly checked",
+  proceed_with_caution: "Verify recommended",
+  high_concern: "Material items to verify",
   incomplete_review: "Incomplete review",
 };
 

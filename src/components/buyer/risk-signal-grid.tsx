@@ -105,7 +105,7 @@ export function RiskSignalGrid({ signals }: RiskSignalGridProps) {
             id="risk-signals-heading"
             className="text-lg font-semibold text-stone-900"
           >
-            Risk signals
+            Known issues from source data
           </h2>
           <p className="text-sm text-stone-500">
             Based on available public data — not a substitute for professional

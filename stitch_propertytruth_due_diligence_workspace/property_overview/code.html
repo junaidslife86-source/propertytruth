@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Property Overview | PropertyTruth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tap-highlight-transparent { -webkit-tap-highlight-color: transparent; }
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.8s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#d3e4fe",
+                      "primary-fixed": "#dae2fd",
+                      "surface-container-low": "#eff4ff",
+                      "error": "#ba1a1a",
+                      "evidence-verify": "#F59E0B",
+                      "background-primary": "#FFFFFF",
+                      "evidence-issue": "#EF4444",
+                      "on-background": "#0b1c30",
+                      "secondary-container": "#86f2e4",
+                      "on-secondary-fixed-variant": "#005049",
+                      "background": "#f8f9ff",
+                      "background-secondary": "#F1F5F9",
+                      "on-primary-fixed": "#131b2e",
+                      "on-tertiary": "#ffffff",
+                      "primary": "#000000",
+                      "surface-container": "#e5eeff",
+                      "outline-variant": "#c6c6cd",
+                      "primary-container": "#131b2e",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-error-container": "#93000a",
+                      "secondary": "#006a61",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-surface": "#0b1c30",
+                      "on-secondary": "#ffffff",
+                      "evidence-positive": "#10B981",
+                      "on-secondary-container": "#006f66",
+                      "tertiary-container": "#191c1e",
+                      "tertiary-fixed": "#e0e3e5",
+                      "surface-container-high": "#dce9ff",
+                      "on-tertiary-container": "#818486",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "on-primary-container": "#7c839b",
+                      "tertiary": "#000000",
+                      "on-surface-variant": "#45464d",
+                      "secondary-fixed": "#89f5e7",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "surface-dim": "#cbdbf5",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "inverse-primary": "#bec6e0",
+                      "surface-variant": "#d3e4fe",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "evidence-missing": "#94A3B8",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-tint": "#565e74",
+                      "outline": "#76777d",
+                      "on-secondary-fixed": "#00201d",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f8f9ff",
+                      "inverse-surface": "#213145"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "1rem",
+                      "stack-xl": "3rem",
+                      "gutter": "1rem",
+                      "stack-sm": "0.5rem",
+                      "container-margin": "1.25rem",
+                      "stack-lg": "2rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Manrope"],
+                      "headline-md": ["Manrope"],
+                      "label-caps": ["JetBrains Mono"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Manrope"],
+                      "headline-lg-mobile": ["Manrope"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased pb-32">
+<!-- Top Navigation Anchor (Desktop) / Header (Mobile) -->
+<header class="bg-background dark:bg-on-background docked full-width top-0 z-50 sticky">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">PropertyTruth</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary dark:text-primary-fixed font-bold hover:opacity-80 transition-opacity" href="#">Overview</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Issues</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Strata</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Inspection</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Due Diligence</a>
+<a class="text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity" href="#">Report</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</div>
+</div>
+<!-- Mobile Property Tabs -->
+<div class="md:hidden flex overflow-x-auto whitespace-nowrap px-container-margin border-b border-outline-variant/30 scrollbar-hide py-2">
+<a class="px-4 py-2 font-label-caps text-label-caps text-primary border-b-2 border-primary" href="#">OVERVIEW</a>
+<a class="px-4 py-2 font-label-caps text-label-caps text-on-surface-variant" href="#">ISSUES</a>
+<a class="px-4 py-2 font-label-caps text-label-caps text-on-surface-variant" href="#">STRATA</a>
+<a class="px-4 py-2 font-label-caps text-label-caps text-on-surface-variant" href="#">INSPECTION</a>
+<a class="px-4 py-2 font-label-caps text-label-caps text-on-surface-variant" href="#">DUE DILIGENCE</a>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-container-margin mt-stack-lg">
+<!-- Hero Module: Due Diligence Coverage -->
+<section class="bg-surface-container-lowest rounded-xl p-stack-lg shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-outline-variant/20 mb-stack-lg">
+<div class="flex flex-col md:flex-row items-center gap-stack-lg">
+<!-- Progress Ring -->
+<div class="relative w-40 h-40">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-container stroke-current" cx="50" cy="50" fill="transparent" r="42" stroke-width="8"></circle>
+<circle class="text-secondary stroke-current progress-ring-circle" cx="50" cy="50" fill="transparent" r="42" stroke-linecap="round" stroke-width="8" style="stroke-dasharray: 263.89; stroke-dashoffset: 84.44;"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-display-lg text-primary">68%</span>
+</div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-2 mb-stack-sm">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg">Due Diligence Coverage</h2>
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-evidence-verify/10 text-evidence-verify font-label-caps text-label-caps self-center md:self-auto">
+                            PARTIALLY CHECKED
+                        </span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md">Some important checks are still missing. Professional review recommended.</p>
+<p class="text-body-sm text-on-surface-variant/70 italic">47 Hill Road, Wentworth Point NSW</p>
+</div>
+</div>
+</section>
+<!-- Summary Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md mb-stack-lg">
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">KNOWN ISSUES</p>
+<p class="font-headline-md text-headline-md">4</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">MISSING CHECKS</p>
+<p class="font-headline-md text-headline-md">3</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">PRO QUESTIONS</p>
+<p class="font-headline-md text-headline-md">9</p>
+</div>
+</div>
+</div>
+<!-- Top Known Issues (Bento Style) -->
+<section class="mb-stack-lg">
+<h3 class="font-headline-md text-headline-md mb-stack-md">Critical Findings</h3>
+<div class="space-y-stack-sm">
+<!-- Issue 1 -->
+<div class="bg-white border-l-4 border-evidence-issue p-stack-md rounded-r-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-evidence-issue text-sm">water_damage</span>
+<h4 class="font-headline-md text-body-lg font-bold">Water ingress mentioned</h4>
+</div>
+<p class="text-body-sm text-on-surface-variant">Evidence found in strata document. Moisture issues reported in southern boundary wall.</p>
+</div>
+<span class="px-2 py-1 bg-error-container text-error rounded font-label-caps text-[10px] tracking-widest">HIGH RISK</span>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/20 flex justify-between items-center">
+<span class="text-[12px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">source</span> Strata Report v2.1
+                        </span>
+<button class="text-secondary font-label-caps text-label-caps flex items-center gap-1 hover:underline">
+                            VIEW EVIDENCE <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Issue 2 -->
+<div class="bg-white border-l-4 border-evidence-verify p-stack-md rounded-r-xl shadow-sm">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-evidence-verify text-sm">account_balance_wallet</span>
+<h4 class="font-headline-md text-body-lg font-bold">Admin fund deficit</h4>
+</div>
+<p class="text-body-sm text-on-surface-variant">Financials require verification. Administrative fund shows negative balance as of last AGM.</p>
+</div>
+<span class="px-2 py-1 bg-evidence-verify/10 text-evidence-verify rounded font-label-caps text-[10px] tracking-widest">VERIFY</span>
+</div>
+</div>
+<!-- Issue 3 & 4 Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<div class="bg-white border-l-4 border-evidence-verify p-stack-md rounded-r-xl shadow-sm">
+<h4 class="font-body-md font-bold mb-1">Nearby development activity</h4>
+<p class="text-body-sm text-on-surface-variant">Review possible impact on views and construction noise from adjacent lot.</p>
+</div>
+<div class="bg-white border-l-4 border-evidence-verify p-stack-md rounded-r-xl shadow-sm">
+<h4 class="font-body-md font-bold mb-1">Parking by-law restrictions</h4>
+<p class="text-body-sm text-on-surface-variant">Check visitor parking availability and strict towing policy mentioned in by-laws.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Missing Checks Panel -->
+<section class="bg-surface-container rounded-xl p-stack-lg mb-stack-lg">
+<h3 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">rule</span> Missing Checks
+            </h3>
+<ul class="space-y-stack-md">
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">circle</span>
+<span class="font-body-md">Contract review not uploaded</span>
+</li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">circle</span>
+<span class="font-body-md">Insurance quote not checked</span>
+</li>
+<li class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">circle</span>
+<span class="font-body-md">Building/pest inspection not completed</span>
+</li>
+</ul>
+</section>
+<!-- Next Best Actions -->
+<section class="mb-stack-xl">
+<h3 class="font-headline-md text-headline-md mb-stack-md">Next Best Actions</h3>
+<div class="space-y-stack-sm">
+<button class="w-full flex items-center justify-between p-stack-md bg-secondary text-on-secondary rounded-xl hover:opacity-90 transition-opacity active:scale-[0.98] duration-100">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">chat</span>
+<span class="text-left font-body-md">Ask conveyancer about water ingress remediation</span>
+</div>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full flex items-center justify-between p-stack-md border border-secondary text-secondary rounded-xl hover:bg-secondary/5 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">description</span>
+<span class="text-left font-body-md">Check current insurance certificate</span>
+</div>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full flex items-center justify-between p-stack-md border border-secondary text-secondary rounded-xl hover:bg-secondary/5 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">checklist</span>
+<span class="text-left font-body-md">Complete open inspection checklist</span>
+</div>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Disclaimer -->
+<footer class="text-center px-stack-lg mb-stack-lg">
+<p class="text-body-sm text-outline italic">“Absence of a finding does not mean absence of an issue.”</p>
+</footer>
+</main>
+<!-- Shared Footer Component -->
+<footer class="w-full py-stack-lg px-container-margin flex flex-col md:flex-row justify-between items-center gap-stack-md bg-background-secondary dark:bg-on-tertiary-fixed border-t border-outline-variant">
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-tertiary-container text-center md:text-left">
+            PropertyTruth © 2024 | Evidence over Opinion. All data sourced from verified property records.
+        </p>
+<div class="flex flex-wrap justify-center gap-4">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Data Methodology</a>
+</div>
+</footer>
+<!-- Bottom Navigation Component (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe pt-2 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-on-tertiary-container shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low transition-colors tap-highlight-transparent active:scale-90 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low transition-colors tap-highlight-transparent active:scale-90 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-caps text-label-caps mt-1">Shortlist</span>
+</a>
+<!-- Active Tab: Compare / Overview Intent Mapping -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 tap-highlight-transparent active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows" style="font-variation-settings: 'FILL' 1;">compare_arrows</span>
+<span class="font-label-caps text-label-caps mt-1">Compare</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low transition-colors tap-highlight-transparent active:scale-90 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-caps text-label-caps mt-1">Inspect</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low transition-colors tap-highlight-transparent active:scale-90 duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps mt-1">Docs</span>
+</a>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        // Simple entry animation for data elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('section, .grid > div');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body></html>

@@ -12,20 +12,20 @@ const LABEL_COPY: Record<
   { headline: string; tone: string }
 > = {
   strong: {
-    headline: "Strong confidence",
-    tone: "Based on available public data, no major buyer concerns stood out in the categories we could check.",
+    headline: "Mostly checked",
+    tone: "Based on public data checked, no major signals stood out in the categories we could review.",
   },
   cautious: {
-    headline: "Proceed with caution",
-    tone: "Based on available public data, some items deserve a closer look before you commit.",
+    headline: "Partially checked",
+    tone: "Based on public data checked, some items warrant professional verification.",
   },
   risky: {
-    headline: "Notable concerns flagged",
-    tone: "Based on available public data, several signals may affect your purchase decision. Review each item carefully.",
+    headline: "Gaps remain",
+    tone: "Based on public data checked, several signals may warrant professional review before you commit.",
   },
   incomplete: {
-    headline: "Snapshot incomplete",
-    tone: "Based on available public data, important categories have not been checked yet. Treat this as a starting point, not a full picture.",
+    headline: "Incomplete review",
+    tone: "Important categories have not been checked yet. Treat this as a starting point, not a full picture.",
   },
 };
 
@@ -67,7 +67,7 @@ function derivePositives(signals: BuyerRiskSignal[]): string[] {
 
   if (!positives.length) {
     positives.push(
-      "No high-severity signals were identified in the categories we could check.",
+      "No high-severity signals were identified in the categories we checked.",
     );
   }
 

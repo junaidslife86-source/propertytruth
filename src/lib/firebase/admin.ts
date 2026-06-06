@@ -94,16 +94,28 @@ export function getAdminStorage() {
   return app ? getStorage(app) : null;
 }
 
+export interface VerifiedUser {
+  uid: string;
+  email?: string;
+  displayName?: string;
+  photoURL?: string;
+}
+
 export async function verifyAuthToken(
   authorization: string | null,
-): Promise<{ uid: string } | null> {
+): Promise<VerifiedUser | null> {
   if (!authorization?.startsWith("Bearer ")) return null;
   const token = authorization.slice("Bearer ".length);
   const auth = getAdminAuth();
   if (!auth) return null;
   try {
     const decoded = await auth.verifyIdToken(token);
-    return { uid: decoded.uid };
+    return {
+      uid: decoded.uid,
+      email: decoded.email,
+      displayName: decoded.name,
+      photoURL: decoded.picture,
+    };
   } catch {
     return null;
   }

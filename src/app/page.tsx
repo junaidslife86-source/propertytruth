@@ -8,54 +8,55 @@ import {
   ClipboardCheck,
   FileText,
   Bookmark,
-  Shield,
+  ListChecks,
   Map,
 } from "lucide-react";
 import { AddressSearch } from "@/components/address-search";
 import { HeroMapBackground } from "@/components/hero-map-background";
-import { APP_TAGLINE } from "@/lib/constants";
+import { APP_TAGLINE, PRODUCT_POSITIONING } from "@/lib/constants";
+import { MASTER_DISCLAIMER } from "@/lib/compliance/copy";
 
 const COCKPIT_FEATURES = [
   {
     href: "/",
     icon: Search,
-    title: "Risk Snapshot",
-    desc: "Scan any Sydney address for buyer confidence score and risk signals.",
-    color: "bg-stone-900 text-white",
+    title: "Address scan",
+    desc: "Check planning data and nearby development activity from public records.",
+    color: "bg-[#131b2e] text-white",
   },
   {
     href: "/compare",
     icon: GitCompareArrows,
-    title: "Compare Board",
-    desc: "Compare up to 4 properties side by side.",
-    color: "bg-amber-100 text-amber-900",
+    title: "Compare board",
+    desc: "Compare known issues and missing checks across up to 4 properties.",
+    color: "bg-secondary-container text-on-secondary-container",
   },
   {
     href: "/inspection/new",
     icon: ClipboardCheck,
-    title: "Inspection Copilot",
+    title: "Inspection copilot",
     desc: "Mobile checklist for open home day with photos and notes.",
     color: "bg-emerald-100 text-emerald-900",
   },
   {
     href: "/strata/upload",
     icon: FileText,
-    title: "Strata AI",
-    desc: "Upload strata PDFs for AI red-flag analysis.",
+    title: "Strata red flag scan",
+    desc: "Upload strata PDFs for evidence-backed red flags and questions.",
     color: "bg-violet-100 text-violet-900",
   },
   {
     href: "/shortlist",
     icon: Bookmark,
     title: "Shortlist",
-    desc: "Track properties you're seriously considering.",
+    desc: "Track properties you are seriously considering.",
     color: "bg-sky-100 text-sky-900",
   },
   {
     href: "/#how-it-works",
-    icon: Shield,
-    title: "Due Diligence",
-    desc: "Verify, offer readiness and ownership cost on each report.",
+    icon: ListChecks,
+    title: "Due diligence workspace",
+    desc: "Track coverage, missing checks, and questions for professionals.",
     color: "bg-orange-100 text-orange-900",
   },
 ];
@@ -63,33 +64,31 @@ const COCKPIT_FEATURES = [
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden border-b border-stone-200/60">
+      <section className="relative overflow-hidden border-b border-outline-variant/30">
         <HeroMapBackground />
-        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pt-24">
+        <div className="relative mx-auto max-w-4xl px-5 pb-20 pt-16 text-center sm:pt-24">
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-3 text-sm font-medium text-stone-500"
+            className="mb-3 font-label-caps text-on-surface-variant"
           >
-            Buyer-side property decision cockpit
+            Evidence over opinion
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl"
+            className="font-[family-name:var(--font-manrope)] text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl"
           >
-            {APP_TAGLINE}
+            Know what you&apos;re buying before you offer
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mx-auto mt-4 max-w-xl text-base text-stone-600"
+            className="mx-auto mt-4 max-w-xl text-lg text-on-surface-variant"
           >
-            Domain helps you find properties. PropertyTruth helps you decide
-            whether to pursue them — with confidence scores, risk maps, inspections
-            and due diligence.
+            {APP_TAGLINE}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -102,12 +101,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="mb-2 text-center text-2xl font-semibold text-stone-900">
-          Your buyer cockpit
+      <section className="mx-auto max-w-6xl px-5 py-16">
+        <h2 className="mb-2 text-center font-[family-name:var(--font-manrope)] text-2xl font-bold">
+          Buyer due diligence workspace
         </h2>
-        <p className="mx-auto mb-10 max-w-lg text-center text-sm text-stone-500">
-          Everything you need from first scan to offer — visual, calm, source-backed.
+        <p className="mx-auto mb-10 max-w-lg text-center text-sm text-on-surface-variant">
+          Organise checks, surface evidence-backed questions, and track what
+          still needs professional verification.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {COCKPIT_FEATURES.map((f, i) => (
@@ -120,18 +120,20 @@ export default function HomePage() {
             >
               <Link
                 href={f.href}
-                className="group flex h-full flex-col rounded-2xl border border-stone-200/80 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="group flex h-full flex-col rounded-xl border border-outline-variant/30 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div
                   className={`mb-4 inline-flex w-fit rounded-xl p-3 ${f.color}`}
                 >
                   <f.icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-semibold text-stone-900">{f.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-stone-500">
+                <h3 className="font-[family-name:var(--font-manrope)] font-semibold">
+                  {f.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-on-surface-variant">
                   {f.desc}
                 </p>
-                <span className="mt-4 text-sm font-medium text-stone-700 group-hover:underline">
+                <span className="mt-4 text-sm font-medium text-secondary group-hover:underline">
                   Open →
                 </span>
               </Link>
@@ -140,17 +142,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="how-it-works" className="border-y border-stone-200/60 bg-white/60 py-16">
-        <div className="mx-auto max-w-3xl px-4 text-center">
-          <Map className="mx-auto mb-4 h-8 w-8 text-stone-400" />
-          <h2 className="text-2xl font-semibold text-stone-900">
-            Evidence-backed, not alarmist
+      <section
+        id="how-it-works"
+        className="border-y border-outline-variant/30 bg-white/60 py-16"
+      >
+        <div className="mx-auto max-w-3xl px-5 text-center">
+          <Map className="mx-auto mb-4 h-8 w-8 text-evidence-missing" />
+          <h2 className="font-[family-name:var(--font-manrope)] text-2xl font-bold">
+            Known / unknown / verify
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-stone-600">
-            We ingest NSW planning, flood, bushfire and strata data into PostGIS
-            and summarise in plain English. No price predictions. No &ldquo;safe&rdquo;
-            or &ldquo;unsafe&rdquo; labels — only what available public data shows and
-            what still needs professional review.
+          <p className="mt-4 text-sm leading-relaxed text-on-surface-variant">
+            {PRODUCT_POSITIONING} {MASTER_DISCLAIMER} We use known / unknown /
+            verify language — grey is not green. No &ldquo;safe to buy&rdquo; or
+            &ldquo;no issues&rdquo; labels.
           </p>
         </div>
       </section>

@@ -9,10 +9,14 @@ import { StrataAskPanel } from "@/components/strata/ask-panel";
 import { StrataSummaryCard } from "@/components/strata/strata-summary-card";
 import { StrataProcessingTimeline } from "@/components/strata/strata-processing-timeline";
 import { StrataSectionCoverage } from "@/components/strata/strata-section-coverage";
+import { StrataDocumentSettings } from "@/components/strata/strata-document-settings";
 import { Badge } from "@/components/ui/badge";
+import { strataRequestHeaders } from "@/lib/auth/api-headers";
+import { getStrataSessionId } from "@/lib/auth/client-session";
 import type { StrataDocument } from "@/lib/strata/schemas";
 import type { ProcessingStatus } from "@/lib/strata/processing-status";
 import { STRATA_DISCLAIMER } from "@/lib/strata/schemas";
+import { DEMO_STRATA_ID } from "@/lib/strata/demo";
 
 export default function StrataReportPage() {
   const params = useParams();
@@ -24,7 +28,10 @@ export default function StrataReportPage() {
     useState<ProcessingStatus>("queued");
 
   const loadDocument = useCallback(async () => {
-    const res = await fetch(`/api/strata/${id}`);
+    getStrataSessionId();
+    const res = await fetch(`/api/strata/${id}`, {
+      headers: await strataRequestHeaders(),
+    });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? "Failed to load");
     setDocument(data);
@@ -42,7 +49,9 @@ export default function StrataReportPage() {
           data.processingStatus !== "failed"
         ) {
           const poll = setInterval(async () => {
-            const statusRes = await fetch(`/api/strata/${id}/status`);
+            const statusRes = await fetch(`/api/strata/${id}/status`, {
+              headers: await strataRequestHeaders(),
+            });
             const statusData = await statusRes.json();
             if (statusRes.ok) {
               setProcessingStatus(statusData.processingStatus);
@@ -161,7 +170,12 @@ export default function StrataReportPage() {
       </section>
 
       {document.status === "ready" && document.processingStatus === "complete" && (
-        <StrataAskPanel documentId={document.id} />
+        <>
+          <StrataAskPanel documentId={document.id} />
+          {document.id !== DEMO_STRATA_ID && (
+            <StrataDocumentSettings documentId={document.id} />
+          )}
+        </>
       )}
     </div>
   );

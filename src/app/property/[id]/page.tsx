@@ -6,7 +6,14 @@ import Link from "next/link";
 import { ArrowLeft, FileText, ClipboardCheck } from "lucide-react";
 import type { PropertyScanResult } from "@/lib/schemas";
 import { propertyScanResultSchema } from "@/lib/schemas";
-import { PropertyConfidenceCard } from "@/components/property-confidence-card";
+import { DueDiligenceCoverageCard } from "@/components/due-diligence/due-diligence-coverage-card";
+import { MissingChecksPanel } from "@/components/compliance/missing-checks-panel";
+import { ProfessionalReviewGate } from "@/components/compliance/professional-review-gate";
+import { PreOfferChecklistCard } from "@/components/buyer/offer-readiness-card";
+import { OwnershipCostSimulator } from "@/components/buyer/ownership-cost-simulator";
+import { PropertyDna } from "@/components/buyer/property-dna";
+import { RiskSignalGrid } from "@/components/buyer/risk-signal-grid";
+import { PaidReportPreview } from "@/components/buyer/paid-report-preview";
 import { DevelopmentFeed } from "@/components/development-feed";
 import { NearbyChangesPanel } from "@/components/nearby-changes-panel";
 import { AIInsightCard } from "@/components/ai-insight-card";
@@ -14,11 +21,12 @@ import { AddToCompareButton } from "@/components/add-to-compare-button";
 import { ShortlistButton } from "@/components/buyer/shortlist-button";
 import { BuyerJourneyTimeline } from "@/components/buyer/buyer-journey-timeline";
 import { DueDiligenceTracker } from "@/components/buyer/due-diligence-tracker";
-import { OfferReadinessCard } from "@/components/buyer/offer-readiness-card";
-import { OwnershipCostSimulator } from "@/components/buyer/ownership-cost-simulator";
-import { PropertyDna } from "@/components/buyer/property-dna";
-import { RiskSignalGrid } from "@/components/buyer/risk-signal-grid";
-import { PaidReportPreview } from "@/components/buyer/paid-report-preview";
+import {
+  PropertyReportTabPanel,
+  PropertyReportTabs,
+  type PropertyReportTab,
+} from "@/components/property/property-report-tabs";
+import { calculateDueDiligenceCoverage } from "@/lib/due-diligence/coverage";
 import { ReportPageSkeleton } from "@/components/skeleton-loaders";
 import dynamic from "next/dynamic";
 import { MapSkeleton } from "@/components/skeleton-loaders";
@@ -42,6 +50,7 @@ export default function PropertyReportPage() {
   const id = decodeURIComponent(params.id as string);
   const [scan, setScan] = useState<PropertyScanResult | null>(null);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<PropertyReportTab>("overview");
 
   const initDD = useDueDiligenceStore((s) => s.initProperty);
   const byProperty = useDueDiligenceStore((s) => s.byProperty);
@@ -95,6 +104,14 @@ export default function PropertyReportPage() {
     [scan, ddItems, hasInspection],
   );
 
+  const coverage = useMemo(
+    () =>
+      scan
+        ? calculateDueDiligenceCoverage(scan, ddItems, { hasInspection })
+        : null,
+    [scan, ddItems, hasInspection],
+  );
+
   const offerReadiness = useMemo(
     () => (scan ? calculateOfferReadiness(scan, ddItems, hasInspection) : null),
     [scan, ddItems, hasInspection],
@@ -105,100 +122,97 @@ export default function PropertyReportPage() {
     [scan],
   );
 
-  if (loading || !scan || !offerReadiness) {
+  if (loading || !scan || !offerReadiness || !coverage) {
     return <ReportPageSkeleton />;
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 px-4 py-8 pb-24">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          New search
-        </Link>
-        <div className="flex flex-wrap items-center gap-2">
-          <ShortlistButton scan={scan} />
-          <AddToCompareButton scan={scan} />
+    <div className="mx-auto max-w-4xl pb-24">
+      <div className="px-5 pt-8">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <Link
-            href="/inspection/new"
-            className="inline-flex h-11 items-center gap-2 rounded-2xl border border-stone-200 bg-white px-4 text-sm font-medium text-stone-800 hover:bg-stone-50"
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-foreground"
           >
-            <ClipboardCheck className="h-4 w-4" />
-            Inspect
+            <ArrowLeft className="h-4 w-4" />
+            New search
           </Link>
-          <Link
-            href={`/property/${encodeURIComponent(scan.propertyId)}/documents`}
-            className="inline-flex h-11 items-center gap-2 rounded-2xl border border-stone-200 bg-white px-4 text-sm font-medium text-stone-800 hover:bg-stone-50"
-          >
-            <FileText className="h-4 w-4" />
-            Documents
-          </Link>
-          <Link
-            href="/strata/upload"
-            className="inline-flex h-11 items-center gap-2 rounded-2xl border border-stone-200 bg-white px-4 text-sm font-medium text-stone-800 hover:bg-stone-50"
-          >
-            <FileText className="h-4 w-4" />
-            Strata AI
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <ShortlistButton scan={scan} />
+            <AddToCompareButton scan={scan} />
+            <Link
+              href="/inspection/new"
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-outline-variant/40 bg-white px-3 text-sm"
+            >
+              <ClipboardCheck className="h-4 w-4" />
+              Inspect
+            </Link>
+            <Link
+              href={`/property/${encodeURIComponent(scan.propertyId)}/documents`}
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-outline-variant/40 bg-white px-3 text-sm"
+            >
+              <FileText className="h-4 w-4" />
+              Documents
+            </Link>
+            <Link
+              href="/strata/upload"
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-outline-variant/40 bg-white px-3 text-sm"
+            >
+              Strata scan
+            </Link>
+          </div>
         </div>
+
+        <p className="font-label-caps text-on-surface-variant">
+          Due diligence workspace
+        </p>
+        <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight md:text-3xl">
+          {scan.formattedAddress}
+        </h1>
       </div>
 
-      <PropertyConfidenceCard
-        address={scan.formattedAddress}
-        confidence={scan.confidenceScore}
-      />
+      <div className="mt-6 px-5">
+        <PropertyReportTabs active={tab} onChange={setTab} />
+      </div>
 
-      <section>
-        <h2 className="mb-4 text-lg font-semibold text-stone-900">
-          Buyer journey
-        </h2>
-        <BuyerJourneyTimeline stages={journey} />
-      </section>
+      <div className="px-5">
+        <PropertyReportTabPanel tab="overview" active={tab}>
+          <DueDiligenceCoverageCard address={scan.formattedAddress} coverage={coverage} />
+          <MissingChecksPanel items={coverage.missingItems} />
+          <BuyerJourneyTimeline stages={journey} />
+          <PropertyDna categories={dna} />
+          <NearbyChangesPanel scan={scan} />
+        </PropertyReportTabPanel>
 
-      <section>
-        <h2 className="mb-4 text-lg font-semibold text-stone-900">
-          Property DNA
-        </h2>
-        <PropertyDna categories={dna} />
-      </section>
+        <PropertyReportTabPanel tab="issues" active={tab}>
+          <RiskSignalGrid signals={scan.buyerRiskSignals} />
+          <MissingChecksPanel items={coverage.missingItems} />
+        </PropertyReportTabPanel>
 
-      <OfferReadinessCard readiness={offerReadiness} />
+        <PropertyReportTabPanel tab="map" active={tab}>
+          <div className="overflow-hidden rounded-xl border border-outline-variant/30 shadow-sm">
+            <InteractiveMap scan={scan} />
+          </div>
+          <DevelopmentFeed developments={scan.developments} />
+        </PropertyReportTabPanel>
 
-      <RiskSignalGrid signals={scan.buyerRiskSignals} />
+        <PropertyReportTabPanel tab="diligence" active={tab}>
+          <DueDiligenceTracker
+            items={ddItems}
+            onUpdate={(itemId, status) =>
+              updateDD(scan.propertyId, itemId, { status })
+            }
+          />
+          <PreOfferChecklistCard readiness={offerReadiness} />
+          <ProfessionalReviewGate />
+          <OwnershipCostSimulator defaultPrice={950_000} />
+        </PropertyReportTabPanel>
 
-      <PaidReportPreview scan={scan} />
-
-      <NearbyChangesPanel scan={scan} />
-
-      <section>
-        <h2 className="mb-4 text-lg font-semibold text-stone-900">
-          Risk map
-        </h2>
-        <div className="overflow-hidden rounded-2xl border border-stone-200/80 shadow-sm">
-          <InteractiveMap scan={scan} />
-        </div>
-      </section>
-
-      <DueDiligenceTracker
-        items={ddItems}
-        onUpdate={(itemId, status) =>
-          updateDD(scan.propertyId, itemId, { status })
-        }
-      />
-
-      <OwnershipCostSimulator defaultPrice={950_000} />
-
-      <section>
-        <h2 className="mb-4 text-lg font-semibold text-stone-900">
-          Nearby developments
-        </h2>
-        <DevelopmentFeed developments={scan.developments} />
-      </section>
-
-      <AIInsightCard scan={scan} />
+        <PropertyReportTabPanel tab="report" active={tab}>
+          <PaidReportPreview scan={scan} />
+          <AIInsightCard scan={scan} />
+        </PropertyReportTabPanel>
+      </div>
     </div>
   );
 }

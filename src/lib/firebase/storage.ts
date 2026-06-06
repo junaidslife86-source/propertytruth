@@ -54,3 +54,8 @@ export async function downloadFromFirebaseStorage(
   const [buffer] = await bucket.file(bucketPath).download();
   return buffer;
 }
+
+export async function deleteFromFirebaseStorage(bucketPath: string): Promise<void> {
+  const bucket = await getWritableBucket();
+  await bucket.file(bucketPath).delete({ ignoreNotFound: true });
+}

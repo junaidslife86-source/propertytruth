@@ -10,29 +10,28 @@ interface StrataSummaryCardProps {
 }
 
 const labelTone: Record<StrataSummary["confidenceLabel"], string> = {
-  strong: "text-emerald-700",
-  mostly_clear: "text-emerald-700",
-  proceed_with_caution: "text-amber-700",
-  high_concern: "text-red-700",
-  incomplete_review: "text-stone-600",
+  strong: "text-evidence-positive",
+  mostly_clear: "text-evidence-positive",
+  proceed_with_caution: "text-evidence-verify",
+  high_concern: "text-evidence-issue",
+  incomplete_review: "text-evidence-missing",
 };
 
 export function StrataSummaryCard({ summary }: StrataSummaryCardProps) {
   return (
-    <Card className="overflow-hidden border-stone-200/80">
+    <Card className="overflow-hidden border-outline-variant/30">
       <CardContent className="p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-stone-400">
-              Strata review confidence
+            <p className="font-label-caps text-on-surface-variant">
+              Strata scan coverage
             </p>
-            <p className="mt-1 text-4xl font-semibold tabular-nums text-stone-900">
-              {summary.confidenceScore}
-              <span className="text-lg text-stone-400">/100</span>
+            <p className="mt-1 font-[family-name:var(--font-manrope)] text-4xl font-bold tabular-nums">
+              {summary.confidenceScore}%
             </p>
             <p
               className={cn(
-                "mt-1 text-sm font-medium capitalize",
+                "mt-1 text-sm font-medium",
                 labelTone[summary.confidenceLabel],
               )}
             >
@@ -40,16 +39,16 @@ export function StrataSummaryCard({ summary }: StrataSummaryCardProps) {
             </p>
           </div>
         </div>
-        <p className="mt-4 text-sm leading-relaxed text-stone-600">
+        <p className="mt-4 text-sm leading-relaxed text-on-surface-variant">
           {summary.headline}
         </p>
 
         {summary.topRisks.length > 0 && (
           <div className="mt-4">
-            <p className="text-xs font-medium uppercase text-stone-400">
-              Top risks
+            <p className="font-label-caps text-on-surface-variant">
+              Known issues in processed pages
             </p>
-            <ul className="mt-2 space-y-1 text-sm text-stone-700">
+            <ul className="mt-2 space-y-1 text-sm">
               {summary.topRisks.map((r) => (
                 <li key={r}>• {r}</li>
               ))}
@@ -58,11 +57,11 @@ export function StrataSummaryCard({ summary }: StrataSummaryCardProps) {
         )}
 
         {summary.missingOrUnknown.length > 0 && (
-          <div className="mt-4 rounded-xl border border-amber-100 bg-amber-50/50 p-3">
-            <p className="text-xs font-medium uppercase text-amber-800">
-              Could not verify / missing
+          <div className="mt-4 rounded-xl border border-evidence-verify/20 bg-evidence-verify/5 p-3">
+            <p className="font-label-caps text-evidence-verify">
+              Could not verify
             </p>
-            <ul className="mt-2 space-y-1 text-sm text-amber-900/80">
+            <ul className="mt-2 space-y-1 text-sm text-on-surface-variant">
               {summary.missingOrUnknown.slice(0, 5).map((m) => (
                 <li key={m}>• {m}</li>
               ))}

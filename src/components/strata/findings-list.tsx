@@ -28,8 +28,9 @@ const confidenceLabel: Record<DocumentFinding["confidence"], string> = {
 export function StrataFindingsList({ findings }: StrataFindingsListProps) {
   if (!findings.length) {
     return (
-      <p className="text-sm text-stone-500">
-        No findings were identified in this report based on available text.
+      <p className="text-sm text-on-surface-variant">
+        No evidence of the categories we scan for was found in processed pages.
+        This does not mean no issues exist.
       </p>
     );
   }
@@ -78,11 +79,14 @@ export function StrataFindingsList({ findings }: StrataFindingsListProps) {
               {finding.supportingQuote}
             </blockquote>
             {finding.recommendedQuestion && (
-              <p className="rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-900">
-                <span className="font-medium">Ask next: </span>
+              <p className="rounded-lg bg-secondary-container/40 px-3 py-2 text-sm">
+                <span className="font-medium">Ask your conveyancer or strata inspector: </span>
                 {finding.recommendedQuestion}
               </p>
             )}
+            <p className="text-xs text-evidence-missing">
+              What remains unknown: whether this has since been resolved or formally closed.
+            </p>
             <p className="flex items-center gap-1 text-xs text-stone-400">
               <AlertTriangle className="h-3 w-3" />
               {confidenceLabel[finding.confidence]}

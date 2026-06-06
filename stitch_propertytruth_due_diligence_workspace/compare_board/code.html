@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Compare Board | PropertyTruth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "evidence-verify": "#F59E0B",
+                        "background-primary": "#FFFFFF",
+                        "evidence-issue": "#EF4444",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#86f2e4",
+                        "on-secondary-fixed-variant": "#005049",
+                        "background": "#f8f9ff",
+                        "background-secondary": "#F1F5F9",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "surface-container": "#e5eeff",
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006a61",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "evidence-positive": "#10B981",
+                        "on-secondary-container": "#006f66",
+                        "tertiary-container": "#191c1e",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#818486",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#89f5e7",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "inverse-primary": "#bec6e0",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "evidence-missing": "#94A3B8",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "outline": "#76777d",
+                        "on-secondary-fixed": "#00201d",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "inverse-surface": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "1rem",
+                        "stack-xl": "3rem",
+                        "gutter": "1rem",
+                        "stack-sm": "0.5rem",
+                        "container-margin": "1.25rem",
+                        "stack-lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #f8f9ff; -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- Top AppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background flex justify-between items-center px-container-margin py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="gavel">gavel</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">PropertyTruth</h1>
+</div>
+<button class="hover:opacity-80 transition-opacity scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="tune">tune</span>
+</button>
+</header>
+<main class="pt-20 pb-32 px-container-margin max-w-7xl mx-auto">
+<!-- Insight Cards (Bento style header) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md mb-stack-lg">
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Best checked property</p>
+<p class="font-headline-md text-headline-md text-primary">47 Hill Road</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-error-container" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Highest strata concern</p>
+<p class="font-headline-md text-headline-md text-primary">12 Smith Street</p>
+</div>
+</div>
+</div>
+<!-- Comparison Table (Horizontal Scrollable Container) -->
+<div class="relative overflow-x-auto no-scrollbar pb-4 -mx-container-margin px-container-margin">
+<div class="min-w-[900px] flex flex-col gap-px bg-outline-variant/20 rounded-xl overflow-hidden">
+<!-- Property Headers Row -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-surface-container-lowest">
+<div class="p-stack-md flex items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Metrics</span>
+</div>
+<div class="p-stack-md flex flex-col gap-2">
+<div class="h-32 w-full rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Modern architectural house at 47 Hill Road, featuring clean white lines, large glass windows, and a lush green manicured garden under bright afternoon sunlight. The aesthetic is premium, high-fidelity, and serene, matching the PropertyTruth brand identity of clarity and surgical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeEzp5ySaA3ViggQ4_f5RASFlnIMfi2IpKbHBRjmC3H4sW7qa7dxCz_TtphVszmhGNyX0Ye004kVN7q4zJx4NAnCriBU-Y1VWfYSh4SVfrDqnFFhjY-PnwvwNX9PWv1u3PITp4dDgX70xNo6SAcIAPU-dzSQtaKICmz6fYIFBlMeW1ojI0IllfNDwgfhtnVYibI3n1uCLp2FRKlJmXeEt2s89NTzZc513UNgG043kVZL59WL8NBhQcZV_gnP3M7Iha6VRHGpkABF0"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mt-2">47 Hill Road</h3>
+</div>
+<div class="p-stack-md flex flex-col gap-2">
+<div class="h-32 w-full rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Sturdy suburban brick home at 12 Smith Street, with classic architecture and a well-maintained porch. The lighting is crisp and clear, emphasizing transparency and detail. The overall atmosphere is trustworthy and analytical, reflecting a data-driven due diligence environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcWrbnD3mLchw572v-Hdm0mj5aEiRWmGeUgAxW8L-UBO0lahApGmlk2-E1TzDGbqGyiXB6mEXGgRra6btOusN2lZYjDpy0l2pdB7nGTq6ooPds22AXAWs_wyb37S6tNAKgf77OI0-EmP7XU_twhZikClQFWnpUDFjKklBb20xlYqPa-3cPUd8UfU31RY9zmaI2ThtGm61lbeBNTp6fA90D-_rLLAXdAV624REXMpoC4H6M-2CdlV6jhKkdbqRwz5CTA3LjAsNxua4"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mt-2">12 Smith Street</h3>
+</div>
+<div class="p-stack-md flex flex-col gap-2">
+<div class="h-32 w-full rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Luxury residence at 5 Park Avenue, showcasing contemporary premium design with high-end materials and expansive terraces. The scene is illuminated by soft, natural light that creates a sense of breathing room and calm authority. Professional and modern startup aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkdMXZm2x4H6RhMZOUPHTV1YhGTwy1cFKuUpYgtuMOy9tfXm7DCFy4nrcXL41yw2C6IEZjo0WOYoFCk2ge-HI0vjYIK9EG6cOmRIEUJAgHW8JbwpJcpE63rKGGJOhJeGeEO1--rCFQkS8DY-12pfhUCE2p9AsgslJZSZSSNozdVMHR7E4zkyTaZFYq3E7FsJrFv_5ylu0Zj_fko6jL1S3kOvYiG6xKOLZa8toMmHAXIyjIbPmckEr-irOIgcKUCH3GEAkdVwjA5-Q"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mt-2">5 Park Avenue</h3>
+</div>
+</div>
+<!-- Row: Due diligence coverage -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-surface-container-lowest">
+<div class="p-stack-md flex items-center border-r border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Coverage %</p>
+</div>
+<div class="p-stack-md flex items-center gap-3">
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+<div class="bg-evidence-positive h-full" style="width: 92%"></div>
+</div>
+<span class="font-label-caps text-label-caps text-evidence-positive">92%</span>
+</div>
+<div class="p-stack-md flex items-center gap-3">
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+<div class="bg-evidence-verify h-full" style="width: 74%"></div>
+</div>
+<span class="font-label-caps text-label-caps text-evidence-verify">74%</span>
+</div>
+<div class="p-stack-md flex items-center gap-3">
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+<div class="bg-evidence-missing h-full" style="width: 61%"></div>
+</div>
+<span class="font-label-caps text-label-caps text-evidence-missing">61%</span>
+</div>
+</div>
+<!-- Row: Known issues count -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-white">
+<div class="p-stack-md flex items-center border-r border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Known issues</p>
+</div>
+<div class="p-stack-md">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-evidence-positive/10 text-evidence-positive font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+                            0 ISSUES
+                        </span>
+</div>
+<div class="p-stack-md">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-evidence-issue/10 text-evidence-issue font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[14px]" data-icon="error">error</span>
+                            3 ISSUES
+                        </span>
+</div>
+<div class="p-stack-md">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-evidence-verify/10 text-evidence-verify font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+                            1 ISSUE
+                        </span>
+</div>
+</div>
+<!-- Row: Missing checks count -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-surface-container-lowest">
+<div class="p-stack-md flex items-center border-r border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Missing checks</p>
+</div>
+<div class="p-stack-md">
+<span class="text-on-surface font-body-md">2</span>
+</div>
+<div class="p-stack-md">
+<span class="text-on-surface font-body-md">8</span>
+</div>
+<div class="p-stack-md">
+<span class="text-on-surface font-body-md">14</span>
+</div>
+</div>
+<!-- Row: Strata risk (pills) -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-white">
+<div class="p-stack-md flex items-center border-r border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Strata risk</p>
+</div>
+<div class="p-stack-md flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-evidence-positive/10 text-evidence-positive rounded text-[10px] font-label-caps uppercase">Low Levy</span>
+<span class="px-2 py-1 bg-evidence-positive/10 text-evidence-positive rounded text-[10px] font-label-caps uppercase">Stable Fund</span>
+</div>
+<div class="p-stack-md flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-evidence-issue/10 text-evidence-issue rounded text-[10px] font-label-caps uppercase">Special Levy</span>
+<span class="px-2 py-1 bg-evidence-verify/10 text-evidence-verify rounded text-[10px] font-label-caps uppercase">No Minutes</span>
+</div>
+<div class="p-stack-md flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-evidence-missing/10 text-evidence-missing rounded text-[10px] font-label-caps uppercase">Unverified</span>
+</div>
+</div>
+<!-- Row: Planning activity (pills) -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-surface-container-lowest">
+<div class="p-stack-md flex items-center border-r border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Planning activity</p>
+</div>
+<div class="p-stack-md">
+<span class="px-2 py-1 bg-evidence-missing/10 text-evidence-missing rounded text-[10px] font-label-caps uppercase">None found</span>
+</div>
+<div class="p-stack-md flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-evidence-verify/10 text-evidence-verify rounded text-[10px] font-label-caps uppercase">Nearby DA</span>
+</div>
+<div class="p-stack-md flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-evidence-issue/10 text-evidence-issue rounded text-[10px] font-label-caps uppercase">Heritage</span>
+<span class="px-2 py-1 bg-evidence-verify/10 text-evidence-verify rounded text-[10px] font-label-caps uppercase">Re-zoning</span>
+</div>
+</div>
+<!-- Row: Next action -->
+<div class="grid grid-cols-[200px_1fr_1fr_1fr] bg-white">
+<div class="p-stack-md flex items-center border-r border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Next action</p>
+</div>
+<div class="p-stack-md">
+<button class="w-full py-2 bg-secondary text-white rounded-lg font-label-caps text-label-caps hover:opacity-90 transition-all">Book Inspection</button>
+</div>
+<div class="p-stack-md">
+<button class="w-full py-2 border border-secondary text-secondary rounded-lg font-label-caps text-label-caps hover:bg-secondary/5 transition-all">Review Reports</button>
+</div>
+<div class="p-stack-md">
+<button class="w-full py-2 bg-primary text-white rounded-lg font-label-caps text-label-caps hover:opacity-90 transition-all">Order Search</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest flex justify-around items-center px-2 pb-safe pt-2 shadow-lg rounded-t-xl border-t border-outline-variant/20">
+<!-- Search -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-label-caps mt-1">Search</span>
+</a>
+<!-- Shortlist -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-caps text-label-caps mt-1">Shortlist</span>
+</a>
+<!-- Compare (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows" style="font-variation-settings: 'FILL' 1;">compare_arrows</span>
+<span class="font-label-caps text-label-caps mt-1">Compare</span>
+</a>
+<!-- Inspect -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-caps text-label-caps mt-1">Inspect</span>
+</a>
+<!-- Docs -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-caps text-label-caps mt-1">Docs</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions: Tap feedback
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.96)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

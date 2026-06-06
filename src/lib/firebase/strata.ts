@@ -1,4 +1,4 @@
-import type { Firestore } from "firebase-admin/firestore";
+import type { DocumentReference, Firestore } from "firebase-admin/firestore";
 import type { StrataDocument } from "@/lib/strata/schemas";
 import type { ProcessingStatus } from "@/lib/strata/processing-status";
 import {
@@ -6,7 +6,10 @@ import {
   mapFindingCategory,
   strataDocumentSchema,
 } from "@/lib/strata/schemas";
-import { uploadToFirebaseStorage } from "@/lib/firebase/storage";
+import { uploadToFirebaseStorage, deleteFromFirebaseStorage } from "@/lib/firebase/storage";
+import { sanitizeUploadFilename, retentionExpiresAt } from "@/lib/strata/document-utils";
+import { redactOptional, redactPii, redactStrataSummary } from "@/lib/compliance/redact";
+import type { StrataReviewSummary } from "@/lib/strata/summary";
 
 const COLLECTION = "strata_documents";
 
@@ -15,6 +18,7 @@ export async function createStrataDocument(
   input: {
     filename: string;
     clientSessionId: string;
+    userId?: string | null;
     propertyCaseId?: string | null;
   },
 ): Promise<string> {
@@ -25,6 +29,7 @@ export async function createStrataDocument(
     storagePath: "",
     mimeType: "application/pdf",
     clientSessionId: input.clientSessionId,
+    userId: input.userId ?? null,
     propertyCaseId: input.propertyCaseId ?? null,
     status: "uploaded",
     processingStatus: "uploaded",
@@ -32,6 +37,8 @@ export async function createStrataDocument(
     errorMessage: null,
     errorCode: null,
     retryAvailable: false,
+    retentionPolicy: "30d",
+    retentionExpiresAt: null,
     createdAt: now,
     updatedAt: now,
   });
@@ -43,7 +50,8 @@ export async function uploadStrataPdf(
   filename: string,
   buffer: Buffer,
 ): Promise<string> {
-  const storagePath = `strata-documents/${documentId}/${filename}`;
+  const safeName = sanitizeUploadFilename(filename);
+  const storagePath = `strata-documents/${documentId}/${safeName}`;
   await uploadToFirebaseStorage(storagePath, buffer, "application/pdf");
   return storagePath;
 }
@@ -118,12 +126,14 @@ export async function fetchStrataDocumentFirestore(
         category: mapFindingCategory(d.category as string),
         title: d.title,
         severity: d.severity,
-        plainEnglishExplanation: d.plainEnglishExplanation,
-        supportingQuote: d.supportingQuote,
+        plainEnglishExplanation: redactPii(d.plainEnglishExplanation as string),
+        supportingQuote: redactPii(d.supportingQuote as string),
         pageNumber: d.pageNumber,
         confidence: d.confidence,
-        buyerImpact: d.buyerImpact,
-        recommendedQuestion: d.recommendedQuestion,
+        buyerImpact: redactOptional(d.buyerImpact as string | undefined),
+        recommendedQuestion: redactOptional(
+          d.recommendedQuestion as string | undefined,
+        ),
         evidenceStrength: d.evidenceStrength,
       });
     })
@@ -140,12 +150,63 @@ export async function fetchStrataDocumentFirestore(
     processingStatus: doc.processingStatus,
     errorMessage: doc.errorMessage ?? null,
     findings: mappedFindings,
-    summary: doc.summary ?? null,
+    summary: doc.summary
+      ? redactStrataSummary(doc.summary as StrataReviewSummary)
+      : null,
     sections: sectionsSnap.docs.map((s) => ({ id: s.id, ...s.data() })),
     extractionMethod: doc.extractionMethod,
     extractionCoverage: doc.extractionCoverage,
     createdAt: doc.createdAt,
   });
+}
+
+async function deleteSubcollection(
+  db: Firestore,
+  parent: DocumentReference,
+  name: string,
+) {
+  const snap = await parent.collection(name).get();
+  if (snap.empty) return;
+  const batch = db.batch();
+  snap.docs.forEach((d) => batch.delete(d.ref));
+  await batch.commit();
+}
+
+export async function updateStrataRetention(
+  db: Firestore,
+  documentId: string,
+  policy: "7d" | "30d" | "keep",
+): Promise<void> {
+  await db.collection(COLLECTION).doc(documentId).update({
+    retentionPolicy: policy,
+    retentionExpiresAt: retentionExpiresAt(policy),
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+export async function deleteStrataDocument(
+  db: Firestore,
+  documentId: string,
+): Promise<void> {
+  const ref = db.collection(COLLECTION).doc(documentId);
+  const snap = await ref.get();
+  if (!snap.exists) return;
+
+  const storagePath = snap.data()?.storagePath as string | undefined;
+
+  for (const sub of ["pages", "sections", "chunks", "findings"]) {
+    await deleteSubcollection(db, ref, sub);
+  }
+
+  await ref.delete();
+
+  if (storagePath) {
+    try {
+      await deleteFromFirebaseStorage(storagePath);
+    } catch {
+      // Storage file may already be gone
+    }
+  }
 }
 
 export async function fetchDocumentChunksFirestore(
@@ -165,7 +226,7 @@ export async function fetchDocumentChunksFirestore(
         id: c.id,
         pageNumber: d.pageNumber as number,
         chunkIndex: d.chunkIndex as number,
-        content: d.content as string,
+        content: redactPii(d.content as string),
       };
     })
     .sort((a, b) =>

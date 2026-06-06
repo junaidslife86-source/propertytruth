@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase/admin";
+import { getAdminDb, verifyAuthToken } from "@/lib/firebase/admin";
 import { createInspectionFirestore } from "@/lib/firebase/inspections";
 import { createInspectionRequestSchema } from "@/lib/inspection/schemas";
 import { buildRoomChecklists } from "@/lib/inspection/checklists";
+import { getRateLimitKey } from "@/lib/auth/access";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const limited = rateLimit(getRateLimitKey(request, "inspection-create"), 10);
+  if (!limited.ok) {
+    return NextResponse.json({ error: "Rate limit reached" }, { status: 429 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -28,7 +35,16 @@ export async function POST(request: Request) {
     );
   }
 
-  const sessionId = request.headers.get("x-inspection-session") ?? null;
+  const sessionId = request.headers.get("x-inspection-session");
+  if (!sessionId) {
+    return NextResponse.json(
+      { error: "Missing inspection session" },
+      { status: 401 },
+    );
+  }
+
+  const identity = await verifyAuthToken(request.headers.get("authorization"));
+
   const checklist = buildRoomChecklists(
     parsed.data.propertyType,
     parsed.data.selectedRooms,
@@ -40,11 +56,11 @@ export async function POST(request: Request) {
       propertyType: parsed.data.propertyType,
       selectedRooms: parsed.data.selectedRooms,
       clientSessionId: sessionId,
+      userId: identity?.uid ?? null,
       checklist,
     });
     return NextResponse.json({ id });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to create inspection";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create inspection" }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 export const APP_NAME = "PropertyTruth";
-export const APP_TAGLINE = "Your buyer-side property decision cockpit.";
+export const APP_TAGLINE =
+  "Organise checks, surface red flags, and prepare questions for professionals.";
 export const DEFAULT_SCAN_RADIUS_METERS = 500;
 export const SYDNEY_BOUNDS = {
   minLat: -34.2,
@@ -9,7 +10,9 @@ export const SYDNEY_BOUNDS = {
 };
 
 export const AI_DISCLAIMER =
-  "Based on available public data. Not a valuation, building inspection, legal advice or professional advice.";
+  "Based on available public data checked. Not a valuation, building inspection, legal advice or professional advice.";
 
 export const BUYER_DISCLAIMER =
-  "Based on available data. Not a valuation, building inspection, legal advice or professional advice.";
+  "Based on available data checked. Not a valuation, building inspection, legal advice or professional advice.";
+
+export { PRODUCT_POSITIONING } from "@/lib/compliance/copy";

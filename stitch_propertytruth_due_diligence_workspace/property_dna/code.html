@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Property DNA | 47 Hill Road</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "evidence-verify": "#F59E0B",
+                        "background-primary": "#FFFFFF",
+                        "evidence-issue": "#EF4444",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#86f2e4",
+                        "on-secondary-fixed-variant": "#005049",
+                        "background": "#f8f9ff",
+                        "background-secondary": "#F1F5F9",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "surface-container": "#e5eeff",
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006a61",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-secondary": "#ffffff",
+                        "evidence-positive": "#10B981",
+                        "on-secondary-container": "#006f66",
+                        "tertiary-container": "#191c1e",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#818486",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#89f5e7",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "inverse-primary": "#bec6e0",
+                        "surface-variant": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "evidence-missing": "#94A3B8",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-tint": "#565e74",
+                        "outline": "#76777d",
+                        "on-secondary-fixed": "#00201d",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "inverse-surface": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "1rem",
+                        "stack-xl": "3rem",
+                        "gutter": "1rem",
+                        "stack-sm": "0.5rem",
+                        "container-margin": "1.25rem",
+                        "stack-lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .dna-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .dna-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- Top AppBar (JSON Component Implementation) -->
+<header class="bg-background dark:bg-on-background fixed top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-size: 24px;">gavel</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">PropertyTruth</span>
+</div>
+<div class="hidden md:flex gap-6">
+<span class="font-label-caps text-label-caps text-primary dark:text-primary-fixed font-bold hover:opacity-80 transition-opacity cursor-pointer">Overview</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity cursor-pointer">Issues</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity cursor-pointer">Strata</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant dark:text-on-primary-container hover:opacity-80 transition-opacity cursor-pointer">Docs</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:opacity-80 transition-opacity">more_vert</button>
+</div>
+</header>
+<!-- Property Header Section -->
+<main class="pt-20 px-container-margin max-w-3xl mx-auto">
+<div class="mt-stack-lg flex flex-col gap-1">
+<div class="flex items-center gap-2 text-on-surface-variant mb-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="font-label-caps text-label-caps uppercase">Property DNA Profile</span>
+</div>
+<h1 class="font-display-lg text-display-lg leading-tight">47 Hill Road</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Residential Unit • Neutral Bay, NSW 2089</p>
+</div>
+<!-- Property Tabs Navigation (Top-level tabs) -->
+<nav class="mt-stack-lg border-b border-outline-variant overflow-x-auto no-scrollbar flex whitespace-nowrap">
+<button class="px-4 py-3 font-label-caps text-label-caps border-b-2 border-primary text-primary transition-colors">Overview</button>
+<button class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">Issues</button>
+<button class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">Strata</button>
+<button class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">Inspection</button>
+<button class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">Due Diligence</button>
+<button class="px-4 py-3 font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">Report</button>
+</nav>
+<!-- Risk Summary Visualization -->
+<section class="mt-stack-lg bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant flex items-center gap-6">
+<div class="relative w-24 h-24 flex-shrink-0">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="80" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-lg text-headline-lg">68%</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Analyzed</span>
+</div>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md mb-1">Evidence Coverage</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Analysis complete for 4/6 core segments. Action required on building and environmental records.</p>
+</div>
+</section>
+<!-- DNA Grid (Bento Style) -->
+<section class="mt-stack-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- 1. Planning DNA -->
+<div class="dna-card bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 rounded-full bg-evidence-verify/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-evidence-verify">architecture</span>
+</div>
+<span class="bg-evidence-verify/10 text-evidence-verify px-3 py-1 rounded-full font-label-caps text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">search</span> VERIFY
+                        </span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-1">Planning DNA</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Proposed 8-storey development 200m south.</p>
+</div>
+</div>
+<!-- 2. Strata DNA -->
+<div class="dna-card bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 rounded-full bg-evidence-issue/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-evidence-issue">corporate_fare</span>
+</div>
+<span class="bg-evidence-issue/10 text-evidence-issue px-3 py-1 rounded-full font-label-caps text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">warning</span> RISK FOUND
+                        </span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-1">Strata DNA</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Minutes mention recurring water ingress in Unit 12.</p>
+</div>
+</div>
+<!-- 3. Building DNA -->
+<div class="dna-card bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 rounded-full bg-evidence-missing/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-evidence-missing">home_work</span>
+</div>
+<span class="bg-evidence-missing/10 text-evidence-missing px-3 py-1 rounded-full font-label-caps text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">block</span> PENDING
+                        </span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-1">Building DNA</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Physical inspection not yet performed or uploaded.</p>
+</div>
+</div>
+<!-- 4. Environmental DNA -->
+<div class="dna-card bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 rounded-full bg-evidence-missing/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-evidence-missing">tsunami</span>
+</div>
+<span class="bg-evidence-missing/10 text-evidence-missing px-3 py-1 rounded-full font-label-caps text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">block</span> UNCHECKED
+                        </span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-1">Environmental DNA</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Flood zone data and bushfire risk missing.</p>
+</div>
+</div>
+<!-- 5. Lifestyle DNA -->
+<div class="dna-card bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 rounded-full bg-evidence-verify/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-evidence-verify">directions_car</span>
+</div>
+<span class="bg-evidence-verify/10 text-evidence-verify px-3 py-1 rounded-full font-label-caps text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">search</span> VERIFY
+                        </span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-1">Lifestyle DNA</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Parking stacker noise issues reported in block.</p>
+</div>
+</div>
+<!-- 6. Financial DNA -->
+<div class="dna-card bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 rounded-full bg-evidence-verify/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-evidence-verify">account_balance</span>
+</div>
+<span class="bg-evidence-verify/10 text-evidence-verify px-3 py-1 rounded-full font-label-caps text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">search</span> VERIFY
+                        </span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-1">Financial DNA</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Admin fund low; special levy discussion active.</p>
+</div>
+</div>
+</section>
+<!-- Footer (JSON Component Implementation) -->
+<footer class="mt-stack-xl bg-background-secondary dark:bg-on-tertiary-fixed w-full py-stack-lg px-container-margin flex flex-col md:flex-row justify-between items-center gap-stack-md border-t border-outline-variant">
+<span class="font-label-caps text-label-caps text-primary">PropertyTruth</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-tertiary-container text-center md:text-left">
+                PropertyTruth © 2024 | Evidence over Opinion. All data sourced from verified property records.
+            </p>
+<div class="flex gap-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Privacy Policy</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Terms</span>
+</div>
+</footer>
+</main>
+<!-- Bottom Navigation (JSON Component Implementation) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-on-tertiary-container shadow-lg flex justify-around items-center px-2 pb-safe pt-2 md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container transition-transform active:scale-90 cursor-pointer">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-caps text-label-caps">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container transition-transform active:scale-90 cursor-pointer">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label-caps text-label-caps">Shortlist</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 transition-transform active:scale-90 cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">compare_arrows</span>
+<span class="font-label-caps text-label-caps">Compare</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container transition-transform active:scale-90 cursor-pointer">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-caps text-label-caps">Inspect</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container-low dark:hover:bg-tertiary-container transition-transform active:scale-90 cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-caps text-label-caps">Docs</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for DNA cards
+        document.querySelectorAll('.dna-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('shadow-md');
+            });
+        });
+
+        // Simple scroll reveal for cards
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.dna-card').forEach(card => {
+            card.classList.add('transition-all', 'duration-500', 'opacity-0', 'translate-y-4');
+            observer.observe(card);
+        });
+    </script>
+</body></html>

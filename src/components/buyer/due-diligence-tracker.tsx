@@ -40,7 +40,7 @@ export function DueDiligenceTracker({ items, onUpdate }: DueDiligenceTrackerProp
         <CardTitle className="flex items-center justify-between text-base">
           <span className="flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4" />
-            Due diligence tracker
+            Due diligence coverage
           </span>
           <span className="text-sm font-normal text-stone-500">{progress}%</span>
         </CardTitle>
