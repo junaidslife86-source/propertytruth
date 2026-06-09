@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, FileText, Loader2, Upload } from "lucide-react";
@@ -18,7 +18,13 @@ import { toast } from "sonner";
 
 export default function StrataUploadPage() {
   const router = useRouter();
-  const { profile } = useAuth();
+  const { profile, user, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace("/login?next=/strata/upload");
+    }
+  }, [authLoading, user, router]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);

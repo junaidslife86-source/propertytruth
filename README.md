@@ -1,106 +1,67 @@
-# Sydney Development Radar
+# Property Truth
 
-Buyer-side property intelligence for Sydney — understand nearby development applications, infrastructure, and zoning context before you buy.
+Buyer-side property intelligence for **NSW** — scan nearby development activity, environmental overlays, and run due diligence before you buy.
 
-**Product philosophy:** *Help buyers avoid future regret.*
+**Phase:** Testing (not public beta). Sample and seeded Firestore data are always labelled in the UI.
 
 ## Stack
 
-- **Frontend:** Next.js App Router, TypeScript, Tailwind CSS, shadcn-style UI, Framer Motion
-- **Backend:** Supabase (PostgreSQL + PostGIS)
-- **Maps:** MapLibre GL
-- **Geocoding:** Google Places API (server-side only)
-- **AI:** Gemini Flash (summarisation only)
-- **State:** Zustand · **Data:** TanStack Query · **Validation:** Zod
+- **Frontend:** Next.js App Router, TypeScript, Tailwind CSS, MapLibre GL
+- **Backend:** Next.js Route Handlers on Vercel (hobby tier — 60s function limit)
+- **Data:** Firebase Auth, Firestore, Firebase Storage
+- **Geocoding:** AddressFinder (NSW) with fallbacks
+- **AI:** Gemini (summaries), Document AI (strata OCR)
+- **State:** Zustand (local + Firestore workspace sync when signed in)
 
 ## Quick start
 
 ```bash
-cd ~/Documents/PropertyTruth
-cp .env.example .env.local
+cd PropertyTruth
+cp .env.example .env.local   # fill Firebase + keys (see below)
 npm install
+npm run seed:nsw             # load NSW sample planning data into Firestore
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). **Demo mode** works without API keys — try addresses like `George Street Sydney` or use autocomplete suggestions.
+Open [http://localhost:3000](http://localhost:3000). Sign in to save property cases, upload strata PDFs, and sync your workspace.
 
-## Environment variables
+## Testing configuration
 
-See `.env.example`. Required for production:
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `APP_ENV` / `NEXT_PUBLIC_APP_ENV` | `testing` | Shows testing banners; allows labelled demo fallback |
+| `ALLOW_DEMO_DATA` | `true` in testing | Demo scan when Firestore has no nearby seed rows |
+| `SEED_SECRET` | optional | Protects `POST /api/admin/seed-nsw` |
 
-| Variable | Purpose |
-|----------|---------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Client auth & RLS |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server scans & ETL |
-| `GOOGLE_PLACES_API_KEY` | Address autocomplete & geocoding |
-| `GEMINI_API_KEY` | Plain-language summaries |
-| `NEXT_PUBLIC_MAPLIBRE_STYLE_URL` | Optional custom map style |
-
-## Supabase & PostGIS setup
-
-1. Create a [Supabase](https://supabase.com) project.
-2. Enable PostGIS: **Database → Extensions → postgis**.
-3. Run migrations in order:
+## NSW seed data
 
 ```bash
-# Via Supabase SQL editor or CLI
-supabase db push
-# Or paste files from supabase/migrations/*.sql
+npm run seed:nsw
+# or
+curl -X POST http://localhost:3000/api/admin/seed-nsw \
+  -H "x-seed-secret: $SEED_SECRET"
 ```
 
-4. Enable Auth providers: **Email** and **Google** in Authentication settings.
-5. Add redirect URL: `https://your-domain.com/auth/callback`
+Populates Firestore collections: `developments`, `infrastructure`, `zoning`, `risk_overlays` (labelled **Seeded sample** in UI).
 
-### Spatial queries
+## Key flows
 
-The `scan_nearby_property(lat, lng, radius_meters)` function uses:
+1. **Address scan** — geocode NSW address → Firestore spatial query → property case (when signed in) → `/properties/[caseId]`
+2. **Strata upload** — auth required → Firebase Storage → chunked pipeline (60s steps, poll `/api/strata/[id]/status`)
+3. **Workspace** — shortlist, compare, due diligence sync to `users/{uid}.workspace`
+4. **Buyer report** — one-off $29 AUD stub; testing mode downloads JSON preview via `/api/reports/[caseId]`
 
-- `ST_DWithin` for radius searches (default **500m**)
-- `ST_Distance` for ordering
-- `ST_Intersects` / `ST_Buffer` for zoning overlays
-- **GiST** indexes on all geometry columns
+## Scripts
 
-## ETL pipeline
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Local dev server |
+| `npm run build` | Production build |
+| `npm test` | Vitest smoke tests |
+| `npm run seed:nsw` | Seed Firestore with NSW sample data |
 
-```bash
-npm run etl:import -- --file ./data/seed/sydney-sample.json --table development_applications
-```
+## Credentials
 
-See [etl/README.md](./etl/README.md) for architecture, supported formats (GeoJSON, CSV, shapefiles via `ogr2ogr`), and retry/logging behaviour.
+See **Credentials checklist** in project docs or ask the agent after setup — required: Firebase client + admin, AddressFinder, MapTiler, Gemini, Document AI (strata), `INTERNAL_PROCESS_SECRET`, `CRON_SECRET` (retention cron).
 
-## Deploy to Vercel
-
-1. Import the `PropertyTruth` repository/folder.
-2. Set all environment variables from `.env.example`.
-3. Deploy — Next.js 15+ App Router is detected automatically.
-4. Add the Vercel deployment URL to Supabase Auth redirect URLs.
-
-## Project structure
-
-```
-src/
-├── app/                 # Routes, API handlers, pages
-├── components/          # UI + feature components
-├── lib/                 # Schemas, scan service, AI, Supabase
-├── providers/           # React Query
-└── stores/              # Zustand
-etl/                     # Import pipelines
-supabase/migrations/     # PostGIS schema
-data/seed/               # Sample GeoJSON
-```
-
-## Core user flow
-
-1. Enter a Sydney address → autocomplete
-2. **Scan Area** → geocode → PostGIS scan (or demo data)
-3. Property report: risk summary, developments, map, AI explanation
-4. Optional: save report (Supabase Auth)
-
-## Future-ready (not implemented)
-
-Architecture supports later: flood overlays, bushfire, strata PDF analysis, sunlight simulation, insurance risk, inspection workflows.
-
-## License
-
-Private — solo founder iteration.
+**Not used at runtime:** Supabase migrations in `supabase/` are legacy reference only.

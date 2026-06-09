@@ -160,9 +160,15 @@ export async function scanPropertyWithFirebase(input: {
       category: o.category,
       severity: o.severity ?? "medium",
       name: o.name,
-      source: o.source ?? o.source_name ?? "NSW open data",
+      source: o.source ?? o.source_name ?? "NSW seeded sample",
       source_url: o.source_url ?? o.sourceUrl,
       last_updated: o.last_updated ?? new Date().toISOString(),
+      lat: o.lat as number | undefined,
+      lng: o.lng as number | undefined,
+      overlayRadiusMeters: (o.overlayRadiusMeters ?? o.overlay_radius_meters) as
+        | number
+        | undefined,
+      geometry: o.geometry as { type: "Polygon"; coordinates: number[][][] } | undefined,
     }),
   );
 

@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase/admin";
-import { downloadFromFirebaseStorage } from "@/lib/firebase/storage";
-import { runStrataProcessingPipeline } from "@/lib/strata/process-pipeline";
+import { advanceStrataPipeline } from "@/lib/strata/process-chunked";
 import { verifyInternalProcessSecret } from "@/lib/auth/access";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 export async function POST(
   request: Request,
@@ -42,9 +41,13 @@ export async function POST(
   }
 
   try {
-    const buffer = await downloadFromFirebaseStorage(doc.storagePath as string);
-    await runStrataProcessingPipeline(db, id, buffer);
-    return NextResponse.json({ ok: true, status: "complete" });
+    const result = await advanceStrataPipeline(db, id);
+    return NextResponse.json({
+      ok: true,
+      status: result.status,
+      done: result.done,
+      continue: result.continue,
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Processing failed";
     return NextResponse.json({ error: "Processing failed", status: "failed" }, { status: 422 });

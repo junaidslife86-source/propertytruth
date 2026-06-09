@@ -26,6 +26,8 @@ import {
 import type { UserDocument, UserUpdateInput } from "@/lib/auth/user-schema";
 import { parseJsonResponse } from "@/lib/api/parse-response";
 import { useBuyerProfileStore } from "@/stores/buyer-profile-store";
+import { pullWorkspace } from "@/lib/workspace/sync-client";
+import { useDueDiligenceStore } from "@/stores/due-diligence-store";
 
 interface AuthContextValue {
   user: User | null;
@@ -97,6 +99,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (doc) {
       setProfile(doc);
       hydrateBuyerProfile(doc);
+    }
+
+    const workspace = await pullWorkspace();
+    if (workspace?.dueDiligence) {
+      useDueDiligenceStore.setState((state) => ({
+        byProperty: { ...state.byProperty, ...workspace.dueDiligence },
+      }));
     }
   }, []);
 

@@ -137,6 +137,47 @@ export async function upsertRiskSignals(
   await batch.commit();
 }
 
+export async function updatePropertyCase(
+  id: string,
+  userId: string,
+  patch: Partial<{
+    status: string;
+    propertyType: string | null;
+    linkedStrataDocumentIds: string[];
+    linkedInspectionIds: string[];
+  }>,
+): Promise<PropertyCaseRow | null> {
+  const db = getAdminDb();
+  if (!db) return null;
+
+  const ref = db.collection("property_cases").doc(id);
+  const snap = await ref.get();
+  if (!snap.exists) return null;
+  if (snap.data()?.userId !== userId) return null;
+
+  await ref.update({
+    ...patch,
+    updatedAt: new Date().toISOString(),
+  });
+  return getPropertyCase(id);
+}
+
+export async function deleteUserPropertyCases(
+  userId: string,
+): Promise<number> {
+  const db = getAdminDb();
+  if (!db) return 0;
+
+  const snap = await db
+    .collection("property_cases")
+    .where("userId", "==", userId)
+    .get();
+  const batch = db.batch();
+  snap.docs.forEach((d) => batch.delete(d.ref));
+  await batch.commit();
+  return snap.size;
+}
+
 export async function updateConfidenceScore(
   propertyCaseId: string,
   score: number,

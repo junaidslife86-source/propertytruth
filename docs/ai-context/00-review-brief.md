@@ -2,13 +2,13 @@
 
 ## What this app is
 
-**PropertyTruth** is a buyer-side property due diligence workspace for the Sydney, Australia market. It helps prospective home buyers organise checks, surface evidence-backed red flags from public data and uploaded documents, and prepare questions for professionals (conveyancers, inspectors, brokers) before making an offer.
+**PropertyTruth** is a buyer-side property due diligence workspace for **NSW, Australia** (testing phase — not public beta). It helps prospective home buyers organise checks, surface evidence-backed red flags from public data and uploaded documents, and prepare questions for professionals (conveyancers, inspectors, brokers) before making an offer.
 
 The npm package name is `sydney-development-radar` (v0.1.0). The public brand is **PropertyTruth**.
 
 ## Who it is for
 
-- **Primary:** Sydney property buyers (apartments, townhouses, houses) doing pre-purchase due diligence
+- **Primary:** NSW property buyers (apartments, townhouses, houses) doing pre-purchase due diligence
 - **Secondary:** Buyers comparing multiple properties, attending open inspections, and reviewing strata report bundles
 
 ## Main user problems it solves
@@ -22,12 +22,13 @@ The npm package name is `sydney-development-radar` (v0.1.0). The public brand is
 
 | Flow | Route(s) | Status |
 |------|----------|--------|
-| Address search & area scan | `/` → `/property/[id]` | Functional; often uses **demo scan data** |
+| Address search & area scan | `/` → `/properties/[caseId]` | Firestore seed + labelled demo fallback |
+| Properties hub | `/properties` | Saved cases (auth required) |
 | Property report (tabs) | `/property/[id]` | UI complete; data quality varies |
 | Compare board | `/compare` | Local storage only |
 | Shortlist | `/shortlist` | Local storage only |
 | Inspection copilot | `/inspection/new` → `/inspection/[id]` | Local storage; partial cloud photo API |
-| Strata red flag scan | `/strata/upload` → `/strata/[id]` | Real pipeline when Firebase configured |
+| Strata red flag scan | `/strata/upload` → `/strata/[id]` | Auth required; chunked pipeline (60s steps) |
 | Auth & profile | `/login`, `/account` | Firebase Auth + Firestore profiles |
 | Onboarding / buyer profile | `/onboarding` | Local + Firebase sync when signed in |
 | Document vault (per property) | `/property/[id]/documents` | Local storage metadata only |
@@ -39,7 +40,7 @@ This is a **solo-founder MVP** moving toward production. We need a brutally hone
 
 - Whether the product is differentiated and trustworthy enough for real buyers
 - UX gaps that cause confusion or loss of trust
-- Architectural split between **Supabase (migrations/ETL)** and **Firebase (runtime)** — is this sustainable?
+- Firestore scan performance at NSW scale (current: full collection + haversine)
 - Security and privacy for strata PDF uploads (financial + PII)
 - AI usage boundaries and hallucination risk
 - Vercel deployment readiness and serverless limits for large PDF processing

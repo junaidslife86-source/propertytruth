@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { scanRequestSchema } from "@/lib/schemas";
-import { scanPropertyArea } from "@/lib/data/scan-service";
+import { ScanUnavailableError, scanPropertyArea } from "@/lib/data/scan-service";
 import { rateLimit } from "@/lib/rate-limit";
 import { DEFAULT_SCAN_RADIUS_METERS } from "@/lib/constants";
+import { verifyAuthToken } from "@/lib/firebase/admin";
+import {
+  createPropertyCase,
+  upsertRiskSignals,
+} from "@/lib/firebase/property-cases";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
@@ -24,14 +29,35 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid scan request" }, { status: 400 });
   }
 
+  const identity = await verifyAuthToken(request.headers.get("authorization"));
+
   try {
-    const result = await scanPropertyArea(parsed.data);
-    return NextResponse.json(result, {
-      headers: {
-        "Cache-Control": "private, max-age=300",
-      },
+    const result = await scanPropertyArea({
+      ...parsed.data,
+      userId: identity?.uid ?? null,
     });
-  } catch {
+
+    let propertyCaseId: string | undefined;
+    if (identity) {
+      const row = await createPropertyCase(result, identity.uid);
+      if (row) {
+        propertyCaseId = row.id;
+        await upsertRiskSignals(row.id, result.buyerRiskSignals);
+      }
+    }
+
+    return NextResponse.json(
+      { ...result, propertyCaseId },
+      {
+        headers: {
+          "Cache-Control": "private, max-age=300",
+        },
+      },
+    );
+  } catch (err) {
+    if (err instanceof ScanUnavailableError) {
+      return NextResponse.json({ error: err.message, code: "SCAN_UNAVAILABLE" }, { status: 503 });
+    }
     return NextResponse.json(
       { error: "We couldn't complete the area scan. Please try again." },
       { status: 500 },

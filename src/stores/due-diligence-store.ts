@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { DueDiligenceItem } from "@/lib/due-diligence/types";
 import { defaultDueDiligenceTemplate } from "@/lib/due-diligence/templates";
+import { scheduleWorkspaceSync } from "@/lib/workspace/sync-client";
 
 const STORAGE_KEY = "propertytruth-due-diligence";
 
@@ -35,14 +36,14 @@ export const useDueDiligenceStore = create<DueDiligenceState>()(
       },
       updateItem: (propertyId, itemId, patch) => {
         const items = get().getItems(propertyId);
-        set({
-          byProperty: {
-            ...get().byProperty,
-            [propertyId]: items.map((i) =>
-              i.id === itemId ? { ...i, ...patch } : i,
-            ),
-          },
-        });
+        const nextByProperty = {
+          ...get().byProperty,
+          [propertyId]: items.map((i) =>
+            i.id === itemId ? { ...i, ...patch } : i,
+          ),
+        };
+        set({ byProperty: nextByProperty });
+        scheduleWorkspaceSync({ dueDiligence: nextByProperty });
       },
     }),
     {

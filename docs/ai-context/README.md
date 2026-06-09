@@ -7,7 +7,7 @@ This folder helps external AI reviewers understand PropertyTruth — the product
 Read in this order:
 
 1. [`00-review-brief.md`](./00-review-brief.md) — What the app is, who it's for, key flows, review goals
-2. [`03-architecture.md`](./03-architecture.md) — Stack, dual-database layout, integrations, env vars
+2. [`03-architecture.md`](./03-architecture.md) — Stack, Firebase-only runtime, testing phase, integrations
 3. [`04-codebase-map.md`](./04-codebase-map.md) — Folders, important files, legacy vs active code
 4. [`12-claude-review-prompt.md`](./12-claude-review-prompt.md) — Full review request and output format
 
@@ -29,7 +29,7 @@ Verify the deployed app matches `main` before reviewing UX copy or feature compl
 | 02 | [user-flows](./02-user-flows.md) | Routes, journeys, UX issues |
 | 03 | [architecture](./03-architecture.md) | Technical architecture |
 | 04 | [codebase-map](./04-codebase-map.md) | File/folder map |
-| 05 | [data-model](./05-data-model.md) | Firestore, Supabase, local state |
+| 05 | [data-model](./05-data-model.md) | Firestore collections, workspace, seed data |
 | 06 | [api-and-integrations](./06-api-and-integrations.md) | API routes & third parties |
 | 07 | [ai-implementation](./07-ai-implementation.md) | Gemini, Document AI, guardrails |
 | 08 | [security-privacy-risk-review](./08-security-privacy-risk-review.md) | Risk register |
@@ -40,10 +40,12 @@ Verify the deployed app matches `main` before reviewing UX copy or feature compl
 
 ## Critical context (read the brief for detail)
 
-- **Runtime backend is Firebase** (Auth, Firestore, Storage); **Supabase/PostGIS** exists for migrations/ETL but is **not wired to live scans**.
-- **Demo data fallbacks** are common when Firestore collections are empty.
-- **Strata PDF pipeline** is the most production-ready AI feature; property scans and map overlays are weaker.
-- **Local-only state:** shortlist, compare, due diligence, inspections (not fully synced to account).
+- **Runtime backend is Firebase only** (Auth, Firestore, Storage). Supabase migrations are legacy reference.
+- **Testing phase:** NSW seed via `npm run seed:nsw`; demo data is labelled (`DataSourceBanner`, `SourceBadge`).
+- **Auth required** for strata upload; scans create `property_cases` when signed in.
+- **Strata pipeline** is chunked for Vercel hobby (60s); status polling advances steps.
+- **Workspace:** due diligence syncs to Firestore; shortlist/compare still primarily local (partial sync API).
+- **Monetisation:** one-off $29 report stub (JSON in testing); Stripe not wired.
 
 ## Rules for reviewers
 

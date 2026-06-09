@@ -149,24 +149,23 @@ export function InteractiveMap({ scan, className, compact }: InteractiveMapProps
         contamination: "#854d0e",
       };
 
-      const overlayFeatures = scan.riskOverlays.map((o, i) => ({
-        type: "Feature" as const,
-        properties: {
-          name: o.name,
-          category: o.category,
-          color: overlayColors[o.category] ?? "#78716c",
-        },
-        geometry: {
-          type: "Polygon" as const,
-          coordinates: [
-            circleCoords(
-              scan.lng + (i - 0.5) * 0.002,
-              scan.lat + (i - 0.5) * 0.0015,
-              120 + i * 40,
-            ),
-          ],
-        },
-      }));
+      const overlayFeatures = scan.riskOverlays.map((o, i) => {
+        const centerLng = o.lng ?? scan.lng + (i - 0.5) * 0.002;
+        const centerLat = o.lat ?? scan.lat + (i - 0.5) * 0.0015;
+        const radius = o.overlayRadiusMeters ?? 120 + i * 40;
+        return {
+          type: "Feature" as const,
+          properties: {
+            name: o.name,
+            category: o.category,
+            color: overlayColors[o.category] ?? "#78716c",
+          },
+          geometry: o.geometry ?? {
+            type: "Polygon" as const,
+            coordinates: [circleCoords(centerLng, centerLat, radius)],
+          },
+        };
+      });
 
       map.addSource("risk-overlays", {
         type: "geojson",

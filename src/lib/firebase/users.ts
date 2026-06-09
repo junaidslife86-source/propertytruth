@@ -164,3 +164,10 @@ export async function linkAnonymousSessions(
 
   return { strataLinked, inspectionsLinked };
 }
+
+export async function deleteUserDocument(
+  db: Firestore,
+  uid: string,
+): Promise<void> {
+  await db.collection(COLLECTION).doc(uid).delete();
+}

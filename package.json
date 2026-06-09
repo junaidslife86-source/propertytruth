@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "seed:nsw": "tsx scripts/seed-firestore-nsw.ts",
     "etl:import": "tsx etl/pipelines/import-geojson.ts"
   },
   "dependencies": {
@@ -49,6 +52,7 @@
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "tsx": "^4.22.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.6"
   }
 }

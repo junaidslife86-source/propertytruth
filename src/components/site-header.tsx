@@ -19,6 +19,9 @@ export function SiteHeader() {
           <Link href="/" className="font-label-caps hover:text-foreground">
             Search
           </Link>
+          <Link href="/properties" className="font-label-caps hover:text-foreground">
+            Properties
+          </Link>
           <Link href="/shortlist" className="font-label-caps hover:text-foreground">
             Shortlist
           </Link>

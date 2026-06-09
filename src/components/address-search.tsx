@@ -7,6 +7,7 @@ import { MapPin, Search, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useScanStore } from "@/stores/scan-store";
+import { authHeaders } from "@/lib/auth/api-headers";
 import { cn } from "@/lib/utils";
 
 type Suggestion = {
@@ -110,7 +111,10 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
 
       const scanRes = await fetch("/api/scan", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(await authHeaders()),
+        },
         body: JSON.stringify({
           formattedAddress: geo.formattedAddress,
           lat: geo.lat,
@@ -123,11 +127,15 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
       if (!scanRes.ok) throw new Error(scan.error ?? "Scan failed");
 
       setLastScan(scan);
-      sessionStorage.setItem(`scan:${scan.propertyId}`, JSON.stringify(scan));
-      router.push(`/property/${encodeURIComponent(scan.propertyId)}`);
+      const routeId = scan.propertyCaseId ?? scan.propertyId;
+      sessionStorage.setItem(`scan:${routeId}`, JSON.stringify(scan));
+      if (scan.propertyCaseId) {
+        sessionStorage.setItem(`case:${routeId}`, scan.propertyCaseId);
+      }
+      router.push(`/properties/${encodeURIComponent(routeId)}`);
     } catch (err) {
       console.error(err);
-      alert("We couldn't scan that address. Please try another Sydney property.");
+      alert("We couldn't scan that address. Try another NSW property or sign in.");
     } finally {
       setScanning(false);
       setIsScanning(false);
@@ -153,7 +161,7 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
               setNoResults(false);
             }}
             onFocus={() => setOpen(true)}
-            placeholder="Enter a Sydney property address"
+            placeholder="Enter an NSW property address"
             className={cn("pl-11", size === "large" && "h-14 text-base")}
             aria-label="Property address"
             aria-autocomplete="list"
@@ -218,7 +226,7 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
             exit={{ opacity: 0 }}
             className="absolute z-50 mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-500 shadow-lg"
           >
-            No addresses found. Try a street number and suburb within Sydney.
+            No addresses found. Try a street number and suburb in NSW.
           </motion.p>
         )}
       </AnimatePresence>

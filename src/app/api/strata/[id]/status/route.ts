@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase/admin";
 import { getStrataDocumentStatus } from "@/lib/firebase/strata";
+import { advanceStrataPipeline } from "@/lib/strata/process-chunked";
 import {
   assertStrataDocumentAccess,
   AccessDeniedError,
@@ -37,9 +38,21 @@ export async function GET(
   try {
     const caller = await resolveClientCaller(request);
     await assertStrataDocumentAccess(db, id, caller);
-    const status = await getStrataDocumentStatus(db, id);
+    let status = await getStrataDocumentStatus(db, id);
     if (!status) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
+    }
+
+    if (
+      status.processingStatus !== "complete" &&
+      status.processingStatus !== "failed"
+    ) {
+      try {
+        await advanceStrataPipeline(db, id);
+        status = (await getStrataDocumentStatus(db, id)) ?? status;
+      } catch (err) {
+        console.error("[strata-status] pipeline advance failed", err);
+      }
     }
 
     return NextResponse.json({

@@ -30,6 +30,12 @@ import { calculateDueDiligenceCoverage } from "@/lib/due-diligence/coverage";
 import { ReportPageSkeleton } from "@/components/skeleton-loaders";
 import dynamic from "next/dynamic";
 import { MapSkeleton } from "@/components/skeleton-loaders";
+import { authHeaders } from "@/lib/auth/api-headers";
+import { DataSourceBanner } from "@/components/compliance/data-source-banner";
+import { ProfessionalQuestionsCard } from "@/components/property/professional-questions-card";
+import { synthesizeProfessionalQuestions } from "@/lib/synthesis/questions";
+import { parseJsonResponse } from "@/lib/api/parse-response";
+import { isDemoDataAllowedClient } from "@/lib/config/app-mode";
 import { buildDemoScanResult } from "@/lib/data/demo-data";
 import { calculateJourneyProgress } from "@/lib/journey/progress";
 import { calculateOfferReadiness } from "@/lib/offer/readiness";
@@ -49,6 +55,8 @@ export default function PropertyReportPage() {
   const params = useParams();
   const id = decodeURIComponent(params.id as string);
   const [scan, setScan] = useState<PropertyScanResult | null>(null);
+  const [propertyCaseId, setPropertyCaseId] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<PropertyReportTab>("overview");
 
@@ -64,27 +72,71 @@ export default function PropertyReportPage() {
   );
 
   useEffect(() => {
-    const cached = sessionStorage.getItem(`scan:${id}`);
-    if (cached) {
-      try {
-        const parsed = propertyScanResultSchema.parse(JSON.parse(cached));
-        setScan(parsed);
-        initDD(parsed.propertyId);
-        setLoading(false);
-        return;
-      } catch {
-        sessionStorage.removeItem(`scan:${id}`);
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      setLoadError(null);
+
+      const cached = sessionStorage.getItem(`scan:${id}`);
+      if (cached) {
+        try {
+          const parsed = propertyScanResultSchema.parse(JSON.parse(cached));
+          if (!cancelled) {
+            setScan(parsed);
+            setPropertyCaseId(sessionStorage.getItem(`case:${id}`));
+            initDD(parsed.propertyId);
+          }
+          setLoading(false);
+          return;
+        } catch {
+          sessionStorage.removeItem(`scan:${id}`);
+        }
       }
+
+      try {
+        const res = await fetch(`/api/property-cases/${encodeURIComponent(id)}`, {
+          headers: await authHeaders(),
+        });
+        if (res.ok) {
+          const data = await parseJsonResponse<{
+            scan: PropertyScanResult | null;
+            case: { id: string };
+          }>(res);
+          if (data.scan && !cancelled) {
+            setScan(data.scan);
+            setPropertyCaseId(data.case.id);
+            initDD(data.scan.propertyId);
+            sessionStorage.setItem(`scan:${id}`, JSON.stringify(data.scan));
+            sessionStorage.setItem(`case:${id}`, data.case.id);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch {
+        /* fall through */
+      }
+
+      if (isDemoDataAllowedClient()) {
+        const demo = buildDemoScanResult(
+          "Sample address — reload after signing in",
+          -33.8688,
+          151.2093,
+        );
+        if (!cancelled) {
+          setScan({ ...demo, propertyId: id, dataSource: "demo" });
+          initDD(id);
+        }
+      } else if (!cancelled) {
+        setLoadError("Property report not found. Run a new scan from the home page.");
+      }
+      setLoading(false);
     }
 
-    const demo = buildDemoScanResult(
-      "123 George Street, Sydney NSW 2000, Australia",
-      -33.8688,
-      151.2093,
-    );
-    setScan({ ...demo, propertyId: id });
-    initDD(id);
-    setLoading(false);
+    void load();
+    return () => {
+      cancelled = true;
+    };
   }, [id, initDD]);
 
   const hasInspection = useMemo(
@@ -122,8 +174,26 @@ export default function PropertyReportPage() {
     [scan],
   );
 
-  if (loading || !scan || !offerReadiness || !coverage) {
+  const professionalQuestions = useMemo(
+    () => (scan ? synthesizeProfessionalQuestions(scan, ddItems) : []),
+    [scan, ddItems],
+  );
+
+  if (loading) {
     return <ReportPageSkeleton />;
+  }
+
+  if (!scan || !offerReadiness || !coverage) {
+    return (
+      <div className="mx-auto max-w-lg px-5 py-20 text-center">
+        <p className="text-on-surface-variant">
+          {loadError ?? "Unable to load this property report."}
+        </p>
+        <Link href="/" className="mt-4 inline-block text-sm font-medium text-primary">
+          New search
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -171,7 +241,8 @@ export default function PropertyReportPage() {
         </h1>
       </div>
 
-      <div className="mt-6 px-5">
+      <div className="mt-6 space-y-4 px-5">
+        <DataSourceBanner scan={scan} />
         <PropertyReportTabs active={tab} onChange={setTab} />
       </div>
 
@@ -204,12 +275,13 @@ export default function PropertyReportPage() {
             }
           />
           <PreOfferChecklistCard readiness={offerReadiness} />
+          <ProfessionalQuestionsCard questions={professionalQuestions} />
           <ProfessionalReviewGate />
           <OwnershipCostSimulator defaultPrice={950_000} />
         </PropertyReportTabPanel>
 
         <PropertyReportTabPanel tab="report" active={tab}>
-          <PaidReportPreview scan={scan} />
+          <PaidReportPreview scan={scan} propertyCaseId={propertyCaseId} />
           <AIInsightCard scan={scan} />
         </PropertyReportTabPanel>
       </div>

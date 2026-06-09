@@ -7,11 +7,7 @@ import {
   uploadStrataPdf,
 } from "@/lib/firebase/strata";
 import { retentionExpiresAt } from "@/lib/strata/document-utils";
-import {
-  requireClientSession,
-  getRateLimitKey,
-  verifyInternalProcessSecret,
-} from "@/lib/auth/access";
+import { getRateLimitKey } from "@/lib/auth/access";
 import { verifyAuthToken } from "@/lib/firebase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 
@@ -44,12 +40,12 @@ export async function POST(request: Request) {
     );
   }
 
-  let sessionId: string;
-  try {
-    sessionId = requireClientSession(request);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "Unauthorized";
-    return NextResponse.json({ error: message }, { status: 401 });
+  const identity = await verifyAuthToken(request.headers.get("authorization"));
+  if (!identity) {
+    return NextResponse.json(
+      { error: "Sign in required to upload strata documents", code: "AUTH_REQUIRED" },
+      { status: 401 },
+    );
   }
 
   let formData: FormData;
@@ -78,14 +74,12 @@ export async function POST(request: Request) {
   const retentionPolicy =
     retentionRaw === "7d" || retentionRaw === "keep" ? retentionRaw : "30d";
 
-  const identity = await verifyAuthToken(request.headers.get("authorization"));
-
   let documentId: string;
   try {
     documentId = await createStrataDocument(db, {
       filename: file.name,
-      clientSessionId: sessionId,
-      userId: identity?.uid ?? null,
+      clientSessionId: identity.uid,
+      userId: identity.uid,
       propertyCaseId:
         typeof propertyCaseId === "string" ? propertyCaseId : null,
     });

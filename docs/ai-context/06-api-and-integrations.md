@@ -8,18 +8,26 @@ All routes live under `src/app/api/`. Auth column: **Firebase JWT** = `Authoriza
 |----------|--------|---------|------|-----------|
 | `/api/places/autocomplete` | GET | Address suggestions | None | `places/autocomplete/route.ts`, `lib/places/autocomplete.ts` |
 | `/api/geocode` | POST | Resolve address → lat/lng | None | `geocode/route.ts`, `lib/places/geocode.ts` |
-| `/api/scan` | POST | Property area scan | None | `scan/route.ts`, `lib/data/scan-service.ts` |
+| `/api/scan` | POST | Property area scan; creates `property_case` if JWT | Optional JWT | `scan/route.ts` |
+| `/api/property-cases` | GET, POST | List / create cases | Firebase JWT | `property-cases/route.ts` |
+| `/api/property-cases/[id]` | GET, PATCH | Case workspace | Firebase JWT | `property-cases/[id]/route.ts` |
+| `/api/workspace` | GET, POST | Sync shortlist/compare/DD | Firebase JWT | `workspace/route.ts` |
+| `/api/admin/seed-nsw` | POST | Seed NSW Firestore data | `SEED_SECRET` | `admin/seed-nsw/route.ts` |
+| `/api/cron/retention` | GET | Expire strata documents | `CRON_SECRET` | `cron/retention/route.ts` |
+| `/api/reports/checkout` | POST | One-off report stub | Firebase JWT | `reports/checkout/route.ts` |
+| `/api/reports/[caseId]` | GET | Report JSON payload | Firebase JWT | `reports/[caseId]/route.ts` |
 | `/api/property/[id]/insights` | POST | Gemini area summary | None | `insights/route.ts`, `lib/ai/gemini.ts` |
 | `/api/saved` | POST | Save report to Firestore | Firebase JWT | `saved/route.ts` |
 | `/api/user` | GET | Load user profile | Firebase JWT | `user/route.ts`, `lib/firebase/users.ts` |
 | `/api/user` | PATCH | Update profile/preferences | Firebase JWT | `user/route.ts` |
+| `/api/user` | DELETE | Delete account + strata + cases | Firebase JWT | `user/route.ts` |
 | `/api/user/link-session` | POST | Link anonymous strata/inspection to user | Firebase JWT | `user/link-session/route.ts` |
-| `/api/strata/upload` | POST | Upload PDF, queue processing | Session + optional JWT | `strata/upload/route.ts` |
+| `/api/strata/upload` | POST | Upload PDF, queue processing | **Firebase JWT required** | `strata/upload/route.ts` |
 | `/api/strata/[id]` | GET | Fetch strata document | Session/JWT + access check | `strata/[id]/route.ts` |
 | `/api/strata/[id]` | PATCH | Update retention | Session/JWT | `strata/[id]/route.ts` |
 | `/api/strata/[id]` | DELETE | Delete doc + storage | Session/JWT | `strata/[id]/route.ts` |
-| `/api/strata/[id]/status` | GET | Processing status poll | Session/JWT | `strata/[id]/status/route.ts` |
-| `/api/strata/[id]/process` | POST | Run analysis pipeline | Internal secret | `strata/[id]/process/route.ts` |
+| `/api/strata/[id]/status` | GET | Poll status **and advance** chunked pipeline | Session/JWT | `strata/[id]/status/route.ts` |
+| `/api/strata/[id]/process` | POST | Advance one pipeline step | Internal secret | `strata/[id]/process/route.ts` (`maxDuration: 60`) |
 | `/api/strata/[id]/ask` | POST | Q&A over document | Session/JWT | `strata/[id]/ask/route.ts` |
 | `/api/inspections` | POST | Create cloud inspection | Session | `inspections/route.ts` |
 | `/api/inspections/[id]/photos` | POST | Upload inspection photo | Session + access | `inspections/[id]/photos/route.ts` |

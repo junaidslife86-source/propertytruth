@@ -63,6 +63,11 @@ export const riskOverlayCategorySchema = z.enum([
   "contamination",
 ]);
 
+const geoPolygonSchema = z.object({
+  type: z.literal("Polygon"),
+  coordinates: z.array(z.array(z.tuple([z.number(), z.number()]))),
+});
+
 export const riskOverlaySchema = z.object({
   id: z.string(),
   category: riskOverlayCategorySchema,
@@ -71,6 +76,10 @@ export const riskOverlaySchema = z.object({
   source: z.string(),
   source_url: z.string().nullish(),
   last_updated: z.string(),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
+  overlayRadiusMeters: z.number().optional(),
+  geometry: geoPolygonSchema.optional(),
 });
 
 export const riskIndicatorSchema = z.object({
