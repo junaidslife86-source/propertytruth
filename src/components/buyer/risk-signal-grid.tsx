@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { BuyerRiskSignal, RiskCategory } from "@/lib/schemas";
-import { BuyerRiskSignalCard } from "@/components/buyer-risk-signal-card";
+import { PlainEnglishRiskCard } from "@/components/buyer/plain-english-risk-card";
 import { cn } from "@/lib/utils";
 
 type FilterId =
@@ -145,7 +145,7 @@ export function RiskSignalGrid({ signals }: RiskSignalGridProps) {
               </h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 {categorySignals.map((signal, i) => (
-                  <BuyerRiskSignalCard
+                  <PlainEnglishRiskCard
                     key={signal.id}
                     signal={signal}
                     index={i}

@@ -18,7 +18,13 @@ import { toast } from "sonner";
 
 export default function StrataUploadPage() {
   const router = useRouter();
+  const [propertyCaseId, setPropertyCaseId] = useState<string | null>(null);
   const { profile, user, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setPropertyCaseId(params.get("caseId"));
+  }, []);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -48,6 +54,9 @@ export default function StrataUploadPage() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("retentionPolicy", retentionPolicy);
+    if (propertyCaseId) {
+      formData.append("propertyCaseId", propertyCaseId);
+    }
     getStrataSessionId();
 
     try {

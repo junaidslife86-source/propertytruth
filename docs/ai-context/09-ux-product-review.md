@@ -1,137 +1,105 @@
 # UX & Product Review
 
-Based on code structure, Stitch design references (`stitch_propertytruth_due_diligence_workspace/`), and implemented components.
+**Last updated:** Property Passport reframe (PPOR-first, journey-oriented).
 
-## First impression
+## North star
 
-**Strengths:**
-- Clear value prop on home: "Know what you're buying before you offer"
-- Evidence-over-opinion framing (`Evidence over opinion` label)
-- Feature grid links to major cockpit tools
-- Hero map background adds visual polish (`hero-map-background.tsx`)
+PropertyTruth is a **pre-offer cockpit** for Australian buyers — not a planning scan dashboard.
 
-**Weaknesses:**
-- Deployed site may lag GitHub (user reported old copy on Vercel before push)
-- README/marketing still mentions "confidence score" in places while UI shifted to "due diligence coverage"
+Central question:
 
-## Navigation clarity
+> Am I ready to make an offer, and what still needs to be verified?
 
-| Element | Assessment |
-|---------|------------|
-| Header: Search, Shortlist, Compare, Strata scan | Clear on desktop |
-| Mobile header | Reduced links (Strata, List) + user menu |
-| Sign in / account | In user menu — good |
-| Property report actions | Many buttons (Shortlist, Compare, Inspect, Documents, Strata) — may overwhelm |
-| No global "My workspace" | User must discover shortlist/compare separately |
+## Implemented UX direction
 
-## Dashboard / workspace usefulness
+### Property Passport (`/properties/[id]`)
 
-Property report (`/property/[id]`) acts as the main workspace with tabs — aligned with Stitch designs.
+Each property file opens with a **Property Passport** summary:
 
-| Tab | Usefulness | Issue |
-|-----|------------|-------|
-| Overview | High | Coverage card + journey timeline |
-| Issues | High | Risk signal grid |
-| Map | Medium | Synthetic overlays reduce trust |
-| Due diligence | High | Tracker + pre-offer checklist |
-| Report | Low today | Paid preview disabled; AI insight is the only live piece |
+- Pre-offer status and next best action
+- Area rows: contract, strata, building/pest, planning, climate/insurance, finance, offer readiness
+- Stats: missing checks, issues to clarify, documents, questions generated
+- Primary actions: Add document, Create questions, Compare property
 
-## Information hierarchy
+### Buyer-language navigation
 
-**Good:**
-- Due diligence coverage prominent over raw scores
-- Missing checks panel surfaces gaps
-- Professional review gate sets expectations
-- Disclaimers contextual (`ContextualDisclaimer`)
+Property tabs reframed:
 
-**Weak:**
-- Demo data not always visible on property page reload
-- Ownership cost simulator buried in diligence tab with generic defaults
-- Compare/shortlist disconnected from account
+| Tab | Label |
+|-----|-------|
+| `summary` | What we know |
+| `risks` | Risks |
+| `map` | Nearby |
+| `verify` | What to verify |
+| `questions` | Questions |
+| `costs` | Costs |
 
-## Visual design consistency
+### Homepage
 
-- Stitch tokens in `globals.css` (Manrope, Inter, JetBrains Mono, evidence colors)
-- Some older components still use `stone-*` palette (inspection flow, parts of paid report)
-- Mix of design systems in transition
+- Hero: emotional first-home-buyer hook
+- Primary CTA: **Start a property file** (was “Scan Area”)
+- Secondary CTA: Upload strata report
+- Feature grid reframed as pre-offer cockpit, not six disconnected tools
 
-## Empty states
+### Trust & labelling
 
-| Screen | Empty state |
-|--------|-------------|
-| Compare | Basic CTA — exists |
-| Shortlist | Basic — exists |
-| Saved reports | **Missing** (no page) |
-| Strata (processing) | Timeline — good |
-| Inspection | N/A |
+- `DataSourceBanner` on property files
+- `SourceBadge` on risk signals and AI summaries
+- `WhatWeCheckedReceipt` — checked vs not checked (grey is not green)
+- Property DNA shows **known / unknown / verify** completeness bars — not buy/safe scores
 
-## Loading states
+### Questions for professionals
 
-| Screen | Loading |
-|--------|---------|
-| Property report | `ReportPageSkeleton` — good |
-| Strata | Spinner + timeline — good |
-| Home scan | Button spinner — good |
-| AI insight | Component-level — good |
-| Account | Spinner — good |
+`QuestionsToAskPanel` groups AI-assisted prompts by:
 
-## Error states
+- Conveyancer, building inspector, strata manager, broker, insurance provider, selling agent
 
-| Screen | Error UX |
-|--------|----------|
-| Home scan | `alert()` — poor |
-| Strata upload | Toast — good |
-| Account save | Toast with message — good (after fix) |
-| Profile API empty body | Was cryptic JSON error — improved |
+### First home buyer mode
 
-## Mobile responsiveness
+- Onboarding: buyer journey type (first home, next home, apartment/strata, investment)
+- `FirstHomeBuyerBanner` on property passport when profile matches
 
-- Inspection flow designed mobile-first (`inspection/new`, room tabs)
-- Property report is content-heavy — tabs help but map/compare may be tight
-- Address search supports large input size on home
+### NSW auction readiness
 
-**Unknown / needs verification:** Real device testing on iOS Safari.
+- Interactive checklist on **What to verify** tab with conveyancer disclaimer
 
-## Trust & credibility
+### Costs
 
-**Builds trust:**
-- Upload consent panel
-- Privacy + terms pages
-- "Not professional advice" repeated appropriately
-- Evidence quotes in strata findings
-- Section coverage shows what was/wasn't in PDF
+- `OwnershipCostSimulator` promoted to dedicated **Costs** tab
 
-**Erodes trust:**
-- Demo planning data without persistent labeling
-- Map flood/bushfire circles not real boundaries
-- "Stripe checkout coming soon" / disabled paid report
-- Old deployed copy mismatch
+## Recently shipped (passport backlog)
 
-## Confusion points
+| Item | Implementation |
+|------|----------------|
+| Strata → passport | `GET /api/property-cases/[id]/strata`, passport row links to `/strata/[id]` |
+| Post-scan moment | `PostScanPrioritiesCard` after new property file |
+| Compare readiness | `compare-readiness.ts` + updated comparison table |
+| Plain-English issues | `PlainEnglishRiskCard` with expandable sections |
+| Climate roadmap | `ClimateInsuranceRoadmap` — resilience checks framing |
 
-1. **Scan vs real data** — User cannot tell if DAs are real
-2. **Sign-in benefit unclear** — What syncs vs what doesn't
-3. **Strata vs property report** — Not linked in one workspace
-4. **Inspection local-only** — Copy says "works offline" but unclear what cloud gives
-5. **Compare limit 4** — No explanation when limit hit
-6. **Document vault** — Appears to upload but stores metadata only locally
+## Remaining gaps
 
-## Recommendations
+| Priority | Item |
+|----------|------|
+| P2 | Sign-in value explanation on homepage |
+| P2 | Post-strata moment: “6 questions for your conveyancer” |
+| P3 | Full climate data layers (beyond scan signals) |
 
-| Recommendation | Impact | Effort | Why it matters |
-|----------------|--------|--------|----------------|
-| Persistent "Demo data" banner on all scan surfaces | High | Low | Trust / legal |
-| Unify signed-in data (shortlist, DD, compare) to Firebase | High | Medium | Account value |
-| Link strata findings to property report | High | Medium | Core product story |
-| Replace `alert()` with toast on scan failure | Medium | Low | Polish |
-| Real map overlays from GeoJSON | High | High | Credibility |
-| "My properties" hub after sign-in | High | Medium | Retention |
-| Simplify property action bar (group secondary actions) | Medium | Low | Cognitive load |
-| Complete Stripe report or remove $29 teaser | Medium | Medium | Avoid bait-and-switch feel |
-| Onboarding prompt after first scan | Medium | Low | Activation |
-| Inspection → property link by address matching | Medium | Medium | Journey continuity |
+## Principles (unchanged)
 
-## TODO
+- Known / unknown / verify — never “safe to buy”
+- AI invisible until useful; labelled AI-assisted
+- Source badge on every insight
+- Not legal, financial, or building advice
 
-- [ ] Conduct 5-user usability test on first scan → offer checklist path
-- [ ] Compare live Vercel UI against Stitch screenshots in `stitch_propertytruth_due_diligence_workspace/`
+## Key files
+
+| Area | Path |
+|------|------|
+| Passport logic | `src/lib/passport/build.ts` |
+| Passport UI | `src/components/property/property-passport.tsx` |
+| Questions panel | `src/components/property/questions-to-ask-panel.tsx` |
+| Checked receipt | `src/components/property/what-we-checked-receipt.tsx` |
+| Property page | `src/app/property/[id]/page.tsx` |
+| Homepage | `src/app/page.tsx` |
+| Onboarding | `src/app/onboarding/page.tsx` |

@@ -1,21 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { X, Scale, FileQuestion, TrendingUp, ClipboardCheck } from "lucide-react";
-import type { PropertyScanResult, RiskSeverity } from "@/lib/schemas";
-import { Badge } from "@/components/ui/badge";
+import { X, FileQuestion, TrendingUp, ClipboardList, Shield } from "lucide-react";
+import type { PropertyScanResult } from "@/lib/schemas";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  COMPARISON_ROWS,
-  findBestForCautiousBuyer,
-  findBestToInspectNext,
-  findHighestFutureChangeRisk,
-  findMostIncompleteData,
-  getComparisonCellValue,
-  type ComparisonRow,
-} from "@/lib/risk/compare";
+  READINESS_ROWS,
+  getReadinessCellValue,
+  findFewestUnknowns,
+  findMostMissingChecks,
+  findHighestCostRisk,
+  type ReadinessRow,
+} from "@/lib/risk/compare-readiness";
 import { useInspectionStore } from "@/stores/inspection-store";
+import { useDueDiligenceStore } from "@/stores/due-diligence-store";
 import { cn } from "@/lib/utils";
 
 interface PropertyComparisonTableProps {
@@ -23,80 +22,31 @@ interface PropertyComparisonTableProps {
   onRemove: (propertyId: string) => void;
 }
 
-const severityLabel: Record<RiskSeverity, string> = {
-  low: "Low",
-  medium: "Medium",
-  high: "High",
-  unknown: "Unknown",
-};
-
-const severityBadge: Record<
-  RiskSeverity,
-  "low" | "medium" | "high" | "default"
-> = {
-  low: "low",
-  medium: "medium",
-  high: "high",
-  unknown: "default",
-};
-
-function RiskPill({ severity }: { severity: RiskSeverity }) {
-  return <Badge variant={severityBadge[severity]}>{severityLabel[severity]}</Badge>;
-}
-
-function ComparisonCell({
+function ReadinessCell({
   scan,
   row,
+  ddItems,
   hasInspection,
 }: {
   scan: PropertyScanResult;
-  row: ComparisonRow;
+  row: ReadinessRow;
+  ddItems: ReturnType<typeof useDueDiligenceStore.getState>["byProperty"][string];
   hasInspection: boolean;
 }) {
-  const value = getComparisonCellValue(scan, row, { hasInspection });
-
-  if (row === "confidence" && typeof value === "number") {
-    return (
-      <div className="flex flex-col items-center gap-1">
-        <span className="text-2xl font-semibold tabular-nums text-stone-900">
-          {value}
-        </span>
-        <span className="text-xs capitalize text-stone-500">
-          {scan.confidenceScore.label}
-        </span>
-      </div>
-    );
-  }
-
-  if (row === "unknown" && typeof value === "number") {
-    return (
-      <span className="text-lg font-semibold tabular-nums text-stone-900">
-        {value}
-      </span>
-    );
-  }
+  const value = getReadinessCellValue(scan, row, {
+    ddItems: ddItems ?? [],
+    hasInspection,
+  });
 
   if (row === "next_action" && typeof value === "string") {
     return (
-      <span className="text-left text-xs leading-relaxed text-stone-600">
-        {value}
-      </span>
+      <span className="text-left text-xs leading-relaxed text-stone-600">{value}</span>
     );
   }
 
-  if (row === "inspection" && typeof value === "string") {
-    const label =
-      value === "low" ? "In progress / done" : "Not started";
-    return (
-      <Badge variant={value === "low" ? "low" : "default"}>{label}</Badge>
-    );
-  }
-
-  if (typeof value === "string") {
-    return <RiskPill severity={value as RiskSeverity} />;
-  }
-
-  return <span className="text-sm text-stone-400">—</span>;
+  return (
+    <span className="text-sm font-medium tabular-nums text-stone-800">{value}</span>
+  );
 }
 
 function InsightCard({
@@ -105,7 +55,7 @@ function InsightCard({
   scan,
   tone,
 }: {
-  icon: typeof Scale;
+  icon: typeof Shield;
   title: string;
   scan: PropertyScanResult | null;
   tone: string;
@@ -136,16 +86,30 @@ export function PropertyComparisonTable({
   onRemove,
 }: PropertyComparisonTableProps) {
   const inspections = useInspectionStore((s) => s.inspections);
+  const byProperty = useDueDiligenceStore((s) => s.byProperty);
+
   const inspectedAddresses = new Set(
     inspections
       .filter((i) => i.status === "completed" || i.status === "in_progress")
       .map((i) => i.propertyAddress),
   );
 
-  const cautiousPick = findBestForCautiousBuyer(properties);
-  const incompletePick = findMostIncompleteData(properties);
-  const changeRiskPick = findHighestFutureChangeRisk(properties);
-  const inspectNextPick = findBestToInspectNext(properties, inspectedAddresses);
+  const fewestUnknowns = findFewestUnknowns(properties);
+  const mostMissing = findMostMissingChecks(properties, byProperty);
+  const highestCost = findHighestCostRisk(properties);
+  const mostComplete = findFewestUnknowns(
+    [...properties].sort((a, b) => {
+      const aMiss = getReadinessCellValue(a, "missing_checks", {
+        ddItems: byProperty[a.propertyId] ?? [],
+        hasInspection: inspectedAddresses.has(a.formattedAddress),
+      });
+      const bMiss = getReadinessCellValue(b, "missing_checks", {
+        ddItems: byProperty[b.propertyId] ?? [],
+        hasInspection: inspectedAddresses.has(b.formattedAddress),
+      });
+      return (aMiss as number) - (bMiss as number);
+    }),
+  );
 
   const showInsights = properties.length >= 2;
 
@@ -154,28 +118,28 @@ export function PropertyComparisonTable({
       {showInsights && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <InsightCard
-            icon={Scale}
-            title="Best overall confidence"
-            scan={cautiousPick}
+            icon={Shield}
+            title="Fewest unknowns"
+            scan={fewestUnknowns}
             tone="bg-emerald-50/60"
           />
           <InsightCard
+            icon={ClipboardList}
+            title="Most complete checklist"
+            scan={mostComplete}
+            tone="bg-sky-50/60"
+          />
+          <InsightCard
             icon={FileQuestion}
-            title="Most incomplete data"
-            scan={incompletePick}
+            title="Most missing checks"
+            scan={mostMissing}
             tone="bg-stone-100/80"
           />
           <InsightCard
             icon={TrendingUp}
-            title="Highest future change risk"
-            scan={changeRiskPick}
+            title="Highest ongoing cost signals"
+            scan={highestCost}
             tone="bg-amber-50/60"
-          />
-          <InsightCard
-            icon={ClipboardCheck}
-            title="Best to inspect next"
-            scan={inspectNextPick}
-            tone="bg-sky-50/60"
           />
         </div>
       )}
@@ -185,7 +149,7 @@ export function PropertyComparisonTable({
           <thead>
             <tr className="border-b border-stone-200/80 bg-stone-50/80">
               <th className="sticky left-0 z-10 bg-stone-50/95 px-4 py-4 text-left font-medium text-stone-500 backdrop-blur-sm">
-                Risk factor
+                Readiness factor
               </th>
               {properties.map((scan) => (
                 <th
@@ -194,14 +158,11 @@ export function PropertyComparisonTable({
                 >
                   <div className="space-y-2">
                     <Link
-                      href={`/property/${encodeURIComponent(scan.propertyId)}`}
+                      href={`/properties/${encodeURIComponent(scan.propertyId)}`}
                       className="block text-left text-sm font-semibold leading-snug text-stone-900 hover:underline"
                     >
                       {scan.formattedAddress}
                     </Link>
-                    <p className="text-left text-xs text-stone-400">
-                      {[scan.suburb, scan.postcode].filter(Boolean).join(" · ")}
-                    </p>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -217,7 +178,7 @@ export function PropertyComparisonTable({
             </tr>
           </thead>
           <tbody>
-            {COMPARISON_ROWS.map((row) => (
+            {READINESS_ROWS.map((row) => (
               <tr
                 key={row.id}
                 className="border-b border-stone-100 last:border-0"
@@ -230,9 +191,10 @@ export function PropertyComparisonTable({
                     key={`${scan.propertyId}-${row.id}`}
                     className="px-4 py-4 text-center"
                   >
-                    <ComparisonCell
+                    <ReadinessCell
                       scan={scan}
                       row={row.id}
+                      ddItems={byProperty[scan.propertyId]}
                       hasInspection={inspectedAddresses.has(scan.formattedAddress)}
                     />
                   </td>
@@ -244,8 +206,8 @@ export function PropertyComparisonTable({
       </div>
 
       <p className="text-xs leading-relaxed text-stone-400">
-        Based on available public data. Comparisons are indicative only — not a
-        valuation or professional advice.
+        Compares readiness and gaps — not listing features or &ldquo;best
+        property.&rdquo; Not professional advice.
       </p>
     </div>
   );

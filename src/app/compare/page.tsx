@@ -55,8 +55,8 @@ export default function ComparePage() {
           </h1>
         </div>
         <p className="max-w-2xl text-sm leading-relaxed text-stone-500">
-          Side-by-side buyer risk snapshot for up to {MAX_COMPARE_PROPERTIES}{" "}
-          scanned properties. Based on available public data.
+          Compare offer readiness, missing checks, and unknowns — not kitchen
+          benches or listing photos. Up to {MAX_COMPARE_PROPERTIES} property files.
         </p>
       </div>
 

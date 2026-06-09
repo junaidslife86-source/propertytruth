@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { PropertyScanResult } from "@/lib/schemas";
 import { AI_DISCLAIMER } from "@/lib/constants";
+import { SourceBadge } from "@/components/compliance/source-badge";
+import { dataSourceToLabel } from "@/lib/sources/types";
 
 interface AIInsightCardProps {
   scan: PropertyScanResult;
@@ -35,9 +37,13 @@ export function AIInsightCard({ scan }: AIInsightCardProps) {
       </h2>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
+          <CardTitle className="flex flex-wrap items-center gap-2 text-base">
             <Sparkles className="h-4 w-4 text-stone-500" />
             Plain-language summary
+            <SourceBadge source="ai_assisted" />
+            <SourceBadge
+              source={dataSourceToLabel(scan.dataSource, scan.dataSource === "database")}
+            />
           </CardTitle>
           <CardDescription>
             Generated from nearby planning records — not legal or financial advice.

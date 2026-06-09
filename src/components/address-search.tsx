@@ -129,6 +129,7 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
       setLastScan(scan);
       const routeId = scan.propertyCaseId ?? scan.propertyId;
       sessionStorage.setItem(`scan:${routeId}`, JSON.stringify(scan));
+      sessionStorage.setItem(`freshScan:${routeId}`, "1");
       if (scan.propertyCaseId) {
         sessionStorage.setItem(`case:${routeId}`, scan.propertyCaseId);
       }
@@ -180,12 +181,12 @@ export function AddressSearch({ className, size = "default" }: AddressSearchProp
           {scanning ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Scanning…
+              Starting…
             </>
           ) : (
             <>
               <Search className="h-4 w-4" />
-              Scan Area
+              Start property file
             </>
           )}
         </Button>

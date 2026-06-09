@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Search,
+  FolderOpen,
   GitCompareArrows,
   ClipboardCheck,
   FileText,
@@ -13,22 +13,29 @@ import {
 } from "lucide-react";
 import { AddressSearch } from "@/components/address-search";
 import { HeroMapBackground } from "@/components/hero-map-background";
-import { APP_TAGLINE, PRODUCT_POSITIONING } from "@/lib/constants";
-import { MASTER_DISCLAIMER } from "@/lib/compliance/copy";
+import { MASTER_DISCLAIMER, PRODUCT_POSITIONING } from "@/lib/compliance/copy";
+import { Button } from "@/components/ui/button";
 
 const COCKPIT_FEATURES = [
   {
     href: "/",
-    icon: Search,
-    title: "Address scan",
-    desc: "Check planning data and nearby development activity from public records.",
+    icon: FolderOpen,
+    title: "Start a property file",
+    desc: "Turn an address into a pre-offer passport — what’s known, missing, and what to ask.",
     color: "bg-[#131b2e] text-white",
+  },
+  {
+    href: "/strata/upload",
+    icon: FileText,
+    title: "Upload strata report",
+    desc: "Extract red flags and conveyancer-ready questions from your PDF.",
+    color: "bg-violet-100 text-violet-900",
   },
   {
     href: "/compare",
     icon: GitCompareArrows,
-    title: "Compare board",
-    desc: "Compare known issues and missing checks across up to 4 properties.",
+    title: "Compare properties",
+    desc: "Compare unknowns, readiness, and missing checks — not listing features.",
     color: "bg-secondary-container text-on-secondary-container",
   },
   {
@@ -39,13 +46,6 @@ const COCKPIT_FEATURES = [
     color: "bg-emerald-100 text-emerald-900",
   },
   {
-    href: "/strata/upload",
-    icon: FileText,
-    title: "Strata red flag scan",
-    desc: "Upload strata PDFs for evidence-backed red flags and questions.",
-    color: "bg-violet-100 text-violet-900",
-  },
-  {
     href: "/shortlist",
     icon: Bookmark,
     title: "Shortlist",
@@ -53,10 +53,10 @@ const COCKPIT_FEATURES = [
     color: "bg-sky-100 text-sky-900",
   },
   {
-    href: "/#how-it-works",
+    href: "/properties",
     icon: ListChecks,
-    title: "Due diligence workspace",
-    desc: "Track coverage, missing checks, and questions for professionals.",
+    title: "My properties",
+    desc: "Your saved property passports and due diligence progress.",
     color: "bg-orange-100 text-orange-900",
   },
 ];
@@ -80,15 +80,17 @@ export default function HomePage() {
             transition={{ delay: 0.05 }}
             className="font-[family-name:var(--font-manrope)] text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl"
           >
-            Know what you&apos;re buying before you offer
+            Before you fall in love with a property, check what could cost you later
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mx-auto mt-4 max-w-xl text-lg text-on-surface-variant"
+            className="mx-auto mt-4 max-w-2xl text-lg text-on-surface-variant"
           >
-            {APP_TAGLINE}
+            PropertyTruth helps Australian buyers turn listings, strata reports,
+            inspections, and public records into a clear pre-offer checklist — what&apos;s
+            known, what&apos;s missing, and what to ask your professionals.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -97,17 +99,26 @@ export default function HomePage() {
             className="mx-auto mt-8 max-w-xl text-left"
           >
             <AddressSearch size="large" />
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/strata/upload">Upload a strata report</Link>
+              </Button>
+            </div>
+            <p className="mt-4 text-center text-xs text-on-surface-variant">
+              Built for buyers. Not agents. Not advice. Just clearer questions before
+              you commit.
+            </p>
           </motion.div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-16">
         <h2 className="mb-2 text-center font-[family-name:var(--font-manrope)] text-2xl font-bold">
-          Buyer due diligence workspace
+          Your pre-offer cockpit
         </h2>
         <p className="mx-auto mb-10 max-w-lg text-center text-sm text-on-surface-variant">
-          Organise checks, surface evidence-backed questions, and track what
-          still needs professional verification.
+          One property file for checks, documents, questions, and offer readiness —
+          not six disconnected tools.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {COCKPIT_FEATURES.map((f, i) => (
@@ -152,9 +163,8 @@ export default function HomePage() {
             Known / unknown / verify
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-on-surface-variant">
-            {PRODUCT_POSITIONING} {MASTER_DISCLAIMER} We use known / unknown /
-            verify language — grey is not green. No &ldquo;safe to buy&rdquo; or
-            &ldquo;no issues&rdquo; labels.
+            {PRODUCT_POSITIONING} {MASTER_DISCLAIMER} Grey is not green — we never
+            label a property &ldquo;safe to buy&rdquo; or &ldquo;recommended.&rdquo;
           </p>
         </div>
       </section>

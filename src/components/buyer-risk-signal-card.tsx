@@ -15,7 +15,16 @@ import {
 import type { BuyerRiskSignal, RiskCategory } from "@/lib/schemas";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SourceBadge } from "@/components/compliance/source-badge";
+import type { SourceLabel } from "@/lib/sources/types";
 import { formatDate } from "@/lib/utils";
+
+function signalSourceLabel(signal: BuyerRiskSignal): SourceLabel {
+  if (signal.severity === "unknown") return "unknown";
+  if (signal.evidenceSource.toLowerCase().includes("demo")) return "demo_sample";
+  if (signal.evidenceSource.toLowerCase().includes("seed")) return "seeded_sample";
+  return "public_record";
+}
 
 interface BuyerRiskSignalCardProps {
   signal: BuyerRiskSignal;
@@ -106,9 +115,12 @@ export function BuyerRiskSignalCard({ signal, index = 0 }: BuyerRiskSignalCardPr
                 <CardTitle className="text-base leading-snug">{signal.title}</CardTitle>
               </div>
             </div>
-            <Badge variant={severityBadge[signal.severity]} className="shrink-0">
-              {severityLabel[signal.severity]}
-            </Badge>
+            <div className="flex shrink-0 flex-col items-end gap-1">
+              <SourceBadge source={signalSourceLabel(signal)} />
+              <Badge variant={severityBadge[signal.severity]} className="shrink-0">
+                {severityLabel[signal.severity]}
+              </Badge>
+            </div>
           </div>
         </CardHeader>
 

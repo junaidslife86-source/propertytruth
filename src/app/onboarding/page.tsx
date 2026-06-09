@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
+  BUYER_JOURNEY_LABELS,
   DEALBREAKER_LABELS,
   useBuyerProfileStore,
+  type BuyerJourneyType,
   type Dealbreaker,
 } from "@/stores/buyer-profile-store";
 import { useAuth } from "@/providers/auth-provider";
@@ -33,6 +35,10 @@ export default function OnboardingPage() {
     profile.dealbreakers,
   );
   const [riskAppetite, setRiskAppetite] = useState(profile.riskAppetite);
+  const [journeyType, setJourneyType] = useState<BuyerJourneyType | undefined>(
+    profile.buyerJourneyType ??
+      (profile.firstHomeBuyer ? "first_home" : undefined),
+  );
 
   function toggleDealbreaker(d: Dealbreaker) {
     setDealbreakers((prev) =>
@@ -46,6 +52,8 @@ export default function OnboardingPage() {
       monthlyComfortPayment: comfort ? Number(comfort) : undefined,
       dealbreakers,
       riskAppetite,
+      buyerJourneyType: journeyType,
+      firstHomeBuyer: journeyType === "first_home",
       completedOnboarding: true,
     };
     updateProfile(nextProfile);
@@ -89,6 +97,31 @@ export default function OnboardingPage() {
 
       <Card>
         <CardContent className="space-y-6 p-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-stone-700">
+              I&apos;m buying
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {(Object.keys(BUYER_JOURNEY_LABELS) as BuyerJourneyType[]).map(
+                (type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setJourneyType(type)}
+                    className={cn(
+                      "rounded-xl border px-3 py-2 text-left text-sm",
+                      journeyType === type
+                        ? "border-stone-900 bg-stone-900 text-white"
+                        : "border-stone-200 text-stone-600",
+                    )}
+                  >
+                    {BUYER_JOURNEY_LABELS[type]}
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium text-stone-700">
               Max purchase budget (AUD)
@@ -162,7 +195,7 @@ export default function OnboardingPage() {
       </Card>
 
       <Button className="w-full" size="lg" onClick={handleComplete}>
-        Save & start scanning
+        Save & start a property file
       </Button>
     </div>
   );

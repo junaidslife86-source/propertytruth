@@ -12,6 +12,19 @@ export type Dealbreaker =
   | "heritage_restrictions"
   | "high_ownership_cost";
 
+export type BuyerJourneyType =
+  | "first_home"
+  | "next_home"
+  | "apartment_strata"
+  | "investment";
+
+export const BUYER_JOURNEY_LABELS: Record<BuyerJourneyType, string> = {
+  first_home: "First home",
+  next_home: "Next home",
+  apartment_strata: "Apartment / strata",
+  investment: "Investment property",
+};
+
 export interface BuyerProfile {
   budgetMin?: number;
   budgetMax?: number;
@@ -21,6 +34,7 @@ export interface BuyerProfile {
   targetSuburbs: string[];
   riskAppetite: "cautious" | "balanced" | "adventurous";
   firstHomeBuyer: boolean;
+  buyerJourneyType?: BuyerJourneyType;
   dealbreakers: Dealbreaker[];
   completedOnboarding: boolean;
 }

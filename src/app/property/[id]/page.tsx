@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, FileText, ClipboardCheck } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { PropertyScanResult } from "@/lib/schemas";
 import { propertyScanResultSchema } from "@/lib/schemas";
 import { DueDiligenceCoverageCard } from "@/components/due-diligence/due-diligence-coverage-card";
@@ -17,10 +17,17 @@ import { PaidReportPreview } from "@/components/buyer/paid-report-preview";
 import { DevelopmentFeed } from "@/components/development-feed";
 import { NearbyChangesPanel } from "@/components/nearby-changes-panel";
 import { AIInsightCard } from "@/components/ai-insight-card";
-import { AddToCompareButton } from "@/components/add-to-compare-button";
-import { ShortlistButton } from "@/components/buyer/shortlist-button";
 import { BuyerJourneyTimeline } from "@/components/buyer/buyer-journey-timeline";
 import { DueDiligenceTracker } from "@/components/buyer/due-diligence-tracker";
+import { AuctionReadinessChecklist } from "@/components/buyer/auction-readiness-checklist";
+import { FirstHomeBuyerBanner } from "@/components/buyer/first-home-buyer-banner";
+import { PropertyPassportCard } from "@/components/property/property-passport";
+import { WhatWeCheckedReceipt } from "@/components/property/what-we-checked-receipt";
+import { QuestionsToAskPanel } from "@/components/property/questions-to-ask-panel";
+import { PostScanPrioritiesCard } from "@/components/property/post-scan-priorities-card";
+import { ClimateInsuranceRoadmap } from "@/components/property/climate-insurance-roadmap";
+import { buildPostScanPriorities } from "@/lib/passport/post-scan-priorities";
+import type { LinkedStrataDocument } from "@/lib/firebase/strata-cases";
 import {
   PropertyReportTabPanel,
   PropertyReportTabs,
@@ -32,7 +39,6 @@ import dynamic from "next/dynamic";
 import { MapSkeleton } from "@/components/skeleton-loaders";
 import { authHeaders } from "@/lib/auth/api-headers";
 import { DataSourceBanner } from "@/components/compliance/data-source-banner";
-import { ProfessionalQuestionsCard } from "@/components/property/professional-questions-card";
 import { synthesizeProfessionalQuestions } from "@/lib/synthesis/questions";
 import { parseJsonResponse } from "@/lib/api/parse-response";
 import { isDemoDataAllowedClient } from "@/lib/config/app-mode";
@@ -40,6 +46,7 @@ import { buildDemoScanResult } from "@/lib/data/demo-data";
 import { calculateJourneyProgress } from "@/lib/journey/progress";
 import { calculateOfferReadiness } from "@/lib/offer/readiness";
 import { buildPropertyDna } from "@/lib/property-dna/build";
+import { buildPropertyPassport } from "@/lib/passport/build";
 import { useDueDiligenceStore } from "@/stores/due-diligence-store";
 import { useInspectionStore } from "@/stores/inspection-store";
 import type { DueDiligenceItem } from "@/lib/due-diligence/types";
@@ -58,7 +65,9 @@ export default function PropertyReportPage() {
   const [propertyCaseId, setPropertyCaseId] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<PropertyReportTab>("overview");
+  const [tab, setTab] = useState<PropertyReportTab>("summary");
+  const [linkedStrata, setLinkedStrata] = useState<LinkedStrataDocument[]>([]);
+  const [showPostScan, setShowPostScan] = useState(false);
 
   const initDD = useDueDiligenceStore((s) => s.initProperty);
   const byProperty = useDueDiligenceStore((s) => s.byProperty);
@@ -128,7 +137,7 @@ export default function PropertyReportPage() {
           initDD(id);
         }
       } else if (!cancelled) {
-        setLoadError("Property report not found. Run a new scan from the home page.");
+        setLoadError("Property file not found. Start a new property file from home.");
       }
       setLoading(false);
     }
@@ -138,6 +147,38 @@ export default function PropertyReportPage() {
       cancelled = true;
     };
   }, [id, initDD]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(`freshScan:${id}`) === "1") {
+      setShowPostScan(true);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (!propertyCaseId) return;
+    let cancelled = false;
+
+    async function loadStrata() {
+      try {
+        const res = await fetch(
+          `/api/property-cases/${encodeURIComponent(propertyCaseId!)}/strata`,
+          { headers: await authHeaders() },
+        );
+        if (!res.ok) return;
+        const data = await parseJsonResponse<{ documents: LinkedStrataDocument[] }>(
+          res,
+        );
+        if (!cancelled) setLinkedStrata(data.documents);
+      } catch {
+        /* optional */
+      }
+    }
+
+    void loadStrata();
+    return () => {
+      cancelled = true;
+    };
+  }, [propertyCaseId]);
 
   const hasInspection = useMemo(
     () =>
@@ -156,12 +197,17 @@ export default function PropertyReportPage() {
     [scan, ddItems, hasInspection],
   );
 
+  const hasStrataScan = linkedStrata.length > 0;
+
   const coverage = useMemo(
     () =>
       scan
-        ? calculateDueDiligenceCoverage(scan, ddItems, { hasInspection })
+        ? calculateDueDiligenceCoverage(scan, ddItems, {
+            hasInspection,
+            hasStrataScan,
+          })
         : null,
-    [scan, ddItems, hasInspection],
+    [scan, ddItems, hasInspection, hasStrataScan],
   );
 
   const offerReadiness = useMemo(
@@ -179,18 +225,64 @@ export default function PropertyReportPage() {
     [scan, ddItems],
   );
 
+  const passport = useMemo(() => {
+    if (!scan || !coverage || !offerReadiness) return null;
+    return buildPropertyPassport({
+      scan,
+      ddItems,
+      coverage,
+      offerReadiness,
+      hasInspection,
+      hasStrataScan,
+      linkedStrata,
+      questionCount: professionalQuestions.length,
+    });
+  }, [
+    scan,
+    ddItems,
+    coverage,
+    offerReadiness,
+    hasInspection,
+    hasStrataScan,
+    linkedStrata,
+    professionalQuestions.length,
+  ]);
+
+  const postScanPriorities = useMemo(
+    () =>
+      scan && coverage
+        ? buildPostScanPriorities(scan, coverage, { hasStrataUpload: hasStrataScan })
+        : [],
+    [scan, coverage, hasStrataScan],
+  );
+
+  function dismissPostScan() {
+    sessionStorage.removeItem(`freshScan:${id}`);
+    setShowPostScan(false);
+  }
+
+  function navigateFromPriority(href: string) {
+    const tabMap: Record<string, PropertyReportTab> = {
+      map: "map",
+      verify: "verify",
+      climate: "summary",
+    };
+    setTab(tabMap[href] ?? "summary");
+    dismissPostScan();
+  }
+
   if (loading) {
     return <ReportPageSkeleton />;
   }
 
-  if (!scan || !offerReadiness || !coverage) {
+  if (!scan || !offerReadiness || !coverage || !passport) {
     return (
       <div className="mx-auto max-w-lg px-5 py-20 text-center">
         <p className="text-on-surface-variant">
-          {loadError ?? "Unable to load this property report."}
+          {loadError ?? "Unable to load this property file."}
         </p>
         <Link href="/" className="mt-4 inline-block text-sm font-medium text-primary">
-          New search
+          Start a property file
         </Link>
       </div>
     );
@@ -199,63 +291,47 @@ export default function PropertyReportPage() {
   return (
     <div className="mx-auto max-w-4xl pb-24">
       <div className="px-5 pt-8">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            New search
-          </Link>
-          <div className="flex flex-wrap items-center gap-2">
-            <ShortlistButton scan={scan} />
-            <AddToCompareButton scan={scan} />
-            <Link
-              href="/inspection/new"
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-outline-variant/40 bg-white px-3 text-sm"
-            >
-              <ClipboardCheck className="h-4 w-4" />
-              Inspect
-            </Link>
-            <Link
-              href={`/property/${encodeURIComponent(scan.propertyId)}/documents`}
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-outline-variant/40 bg-white px-3 text-sm"
-            >
-              <FileText className="h-4 w-4" />
-              Documents
-            </Link>
-            <Link
-              href="/strata/upload"
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-outline-variant/40 bg-white px-3 text-sm"
-            >
-              Strata scan
-            </Link>
-          </div>
-        </div>
-
-        <p className="font-label-caps text-on-surface-variant">
-          Due diligence workspace
-        </p>
-        <h1 className="font-[family-name:var(--font-manrope)] text-2xl font-bold tracking-tight md:text-3xl">
-          {scan.formattedAddress}
-        </h1>
+        <Link
+          href="/properties"
+          className="mb-6 inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          My properties
+        </Link>
       </div>
 
-      <div className="mt-6 space-y-4 px-5">
+      <div className="space-y-4 px-5">
+        <FirstHomeBuyerBanner />
         <DataSourceBanner scan={scan} />
+        {showPostScan && (
+          <PostScanPrioritiesCard
+            priorities={postScanPriorities}
+            onDismiss={dismissPostScan}
+            onNavigateTab={navigateFromPriority}
+          />
+        )}
+        <PropertyPassportCard
+          address={scan.formattedAddress}
+          passport={passport}
+          propertyCaseId={propertyCaseId}
+          onGoToQuestions={() => setTab("questions")}
+          onGoToVerify={() => setTab("verify")}
+        />
         <PropertyReportTabs active={tab} onChange={setTab} />
       </div>
 
       <div className="px-5">
-        <PropertyReportTabPanel tab="overview" active={tab}>
-          <DueDiligenceCoverageCard address={scan.formattedAddress} coverage={coverage} />
-          <MissingChecksPanel items={coverage.missingItems} />
+        <PropertyReportTabPanel tab="summary" active={tab}>
           <BuyerJourneyTimeline stages={journey} />
+          <ClimateInsuranceRoadmap scan={scan} />
+          <WhatWeCheckedReceipt scan={scan} />
+          <DueDiligenceCoverageCard address={scan.formattedAddress} coverage={coverage} />
           <PropertyDna categories={dna} />
           <NearbyChangesPanel scan={scan} />
+          <AIInsightCard scan={scan} />
         </PropertyReportTabPanel>
 
-        <PropertyReportTabPanel tab="issues" active={tab}>
+        <PropertyReportTabPanel tab="risks" active={tab}>
           <RiskSignalGrid signals={scan.buyerRiskSignals} />
           <MissingChecksPanel items={coverage.missingItems} />
         </PropertyReportTabPanel>
@@ -267,22 +343,30 @@ export default function PropertyReportPage() {
           <DevelopmentFeed developments={scan.developments} />
         </PropertyReportTabPanel>
 
-        <PropertyReportTabPanel tab="diligence" active={tab}>
+        <PropertyReportTabPanel tab="verify" active={tab}>
           <DueDiligenceTracker
             items={ddItems}
             onUpdate={(itemId, status) =>
               updateDD(scan.propertyId, itemId, { status })
             }
           />
+          <AuctionReadinessChecklist />
           <PreOfferChecklistCard readiness={offerReadiness} />
-          <ProfessionalQuestionsCard questions={professionalQuestions} />
           <ProfessionalReviewGate />
-          <OwnershipCostSimulator defaultPrice={950_000} />
+          <PaidReportPreview scan={scan} propertyCaseId={propertyCaseId} />
         </PropertyReportTabPanel>
 
-        <PropertyReportTabPanel tab="report" active={tab}>
-          <PaidReportPreview scan={scan} propertyCaseId={propertyCaseId} />
-          <AIInsightCard scan={scan} />
+        <PropertyReportTabPanel tab="questions" active={tab}>
+          <QuestionsToAskPanel questions={professionalQuestions} />
+        </PropertyReportTabPanel>
+
+        <PropertyReportTabPanel tab="costs" active={tab}>
+          <OwnershipCostSimulator defaultPrice={950_000} />
+          <p className="text-xs text-on-surface-variant">
+            Household affordability estimate only — not tax, investment, or loan
+            advice. Strata levies and special levies can change; confirm with your
+            broker and strata manager.
+          </p>
         </PropertyReportTabPanel>
       </div>
     </div>
